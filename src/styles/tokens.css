@@ -1,0 +1,43 @@
+/* Typography and colors follow the supplied specifications.
+   Add only evidenced design tokens. */
+@theme {
+  --color-*: initial;
+  --font-*: initial;
+  --text-*: initial;
+  --font-weight-*: initial;
+  --leading-*: initial;
+  --tracking-*: initial;
+  --radius-*: initial;
+  --shadow-*: initial;
+  --breakpoint-*: initial;
+  --container-*: initial;
+
+  --font-body: 'Red Hat Text', sans-serif;
+  --font-display: 'Red Hat Display', sans-serif;
+
+  --color-primary: #655a7c;
+  --color-primary-content: #e9e7ee;
+  --color-primary-dark: #4d455e;
+  --color-primary-light: #7e7198;
+
+  --color-secondary: #667c5a;
+  --color-secondary-content: #eaeee7;
+  --color-secondary-dark: #4e5e45;
+  --color-secondary-light: #7f9871;
+
+  --color-background: #efeff1;
+  --color-foreground: #fbfbfb;
+  --color-border: #dedde2;
+
+  --color-copy: #252329;
+  --color-copy-light: #635e6e;
+  --color-copy-lighter: #898495;
+
+  --color-success: #5a7c5a;
+  --color-warning: #7c7c5a;
+  --color-error: #7c5a5a;
+
+  --color-success-content: #e7eee7;
+  --color-warning-content: #eeeee7;
+  --color-error-content: #eee7e7;
+}

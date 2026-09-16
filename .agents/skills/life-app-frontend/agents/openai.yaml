@@ -1,0 +1,7 @@
+interface:
+  display_name: 'Life App Frontend'
+  short_description: 'Design fidelity and frontend quality for Life App'
+  default_prompt: 'Use $life-app-frontend to complete this Life App task with the required architecture, design fidelity, and validation workflow.'
+
+policy:
+  allow_implicit_invocation: true
