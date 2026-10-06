@@ -1,0 +1,175 @@
+.scene {
+  display: grid;
+  place-items: center;
+  min-height: 100dvh;
+  padding: 40px 16px;
+  overflow: hidden;
+  background: var(--color-scene);
+}
+
+/*
+ * Narrow scene: the guide stands top-left and the player bottom-right, so the
+ * exchange still travels diagonally between them instead of stacking like a chat.
+ * The 720px switch is an unapproved assumption; revise it with the design.
+ */
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-areas:
+    'guide  .'
+    'line   line'
+    'answer answer'
+    '.      player';
+  row-gap: 20px;
+  width: 100%;
+  max-width: 1120px;
+}
+
+.guide {
+  grid-area: guide;
+  justify-self: start;
+}
+
+.line {
+  grid-area: line;
+  display: flex;
+  justify-content: flex-start;
+  /* Leaves room for the player on the opposite side. */
+  padding-right: 24px;
+}
+
+.answer {
+  grid-area: answer;
+  display: flex;
+  justify-content: flex-end;
+  min-height: 76px;
+  padding-left: 40px;
+}
+
+.player {
+  grid-area: player;
+  justify-self: end;
+  margin-top: -4px;
+}
+
+@media (min-width: 720px) {
+  .stage {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    grid-template-areas:
+      'guide line   .'
+      'guide answer player';
+    column-gap: clamp(24px, 3vw, 48px);
+    row-gap: 28px;
+    align-items: end;
+  }
+
+  .line {
+    max-width: 600px;
+    padding-right: 0;
+  }
+
+  .answer {
+    min-height: 0;
+    padding-left: 0;
+    /* Lifts the answer so its tail points at the player's face, not feet. */
+    padding-bottom: clamp(36px, 4vw, 52px);
+  }
+
+  .player {
+    margin-top: 0;
+  }
+}
+
+.lineText {
+  display: grid;
+  margin: 0;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+@media (min-width: 720px) {
+  .lineText {
+    font-size: 22px;
+  }
+}
+
+.lineText > span {
+  grid-area: 1 / 1;
+}
+
+.lineGhost {
+  visibility: hidden;
+}
+
+/* Reserved before the marker appears so the bubble does not resize. */
+.continueRow {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: 16px;
+  margin: 6px -10px -6px 0;
+}
+
+/* The classic "more text" marker in the bubble's bottom-right corner. */
+.continueButton {
+  display: grid;
+  place-items: center;
+  width: 30px;
+  height: 26px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: var(--color-copy);
+  cursor: pointer;
+}
+
+.continueButton:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 1px;
+}
+
+.continueArrow {
+  width: 12px;
+  height: 9px;
+  background: currentColor;
+  clip-path: polygon(0 0, 100% 0, 50% 100%);
+  animation: nudge 1.1s ease-in-out infinite;
+}
+
+.answerText {
+  margin: 0;
+  font-weight: 500;
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 720px) {
+  /* The answer input inherits this size. */
+  .answer {
+    font-size: 20px;
+  }
+}
+
+@keyframes nudge {
+  50% {
+    transform: translateY(3px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .continueArrow {
+    animation: none;
+  }
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

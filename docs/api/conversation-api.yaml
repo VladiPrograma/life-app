@@ -1,0 +1,331 @@
+openapi: 3.1.0
+info:
+  title: Life App Conversation API
+  version: 0.1.0
+  description: |
+    Stores the answers a visitor gives during the onboarding conversation.
+
+    Flow used by the frontend:
+    1. `POST /conversation-sessions` when the scene starts. The response holds a
+       `sessionToken` that authorizes every later call for that session.
+    2. `PUT /conversation-sessions/{sessionId}/answers/{answerKey}` each time the
+       visitor submits an answer. PUT is idempotent, so retries are safe.
+    3. `POST /conversation-sessions/{sessionId}/complete` after the last step.
+
+    The visitor is anonymous, so the session token is the only credential.
+    Answers can contain personal data (for example, a name); store and log them
+    accordingly.
+
+servers:
+  - url: http://localhost:8080/api/v1
+    description: Local development (assumption; adjust to the real backend)
+
+tags:
+  - name: Sessions
+    description: One anonymous visitor going through one conversation flow.
+  - name: Answers
+    description: Individual answers saved as the visitor submits them.
+
+paths:
+  /conversation-sessions:
+    post:
+      tags: [Sessions]
+      operationId: createConversationSession
+      summary: Start a conversation session
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSessionRequest'
+            example:
+              flowId: onboarding
+              flowVersion: 1
+              locale: en-US
+      responses:
+        '201':
+          description: Session created.
+          headers:
+            Location:
+              description: URL of the new session.
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreatedSession'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+
+  /conversation-sessions/{sessionId}:
+    parameters:
+      - $ref: '#/components/parameters/SessionId'
+    get:
+      tags: [Sessions]
+      operationId: getConversationSession
+      summary: Get a session and its saved answers
+      description: Lets the frontend resume an interrupted conversation.
+      responses:
+        '200':
+          description: The session.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationSession'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /conversation-sessions/{sessionId}/answers/{answerKey}:
+    parameters:
+      - $ref: '#/components/parameters/SessionId'
+      - $ref: '#/components/parameters/AnswerKey'
+    put:
+      tags: [Answers]
+      operationId: saveAnswer
+      summary: Save or replace one answer
+      description: |
+        Creates the answer or replaces the previous value for the same key.
+        Returns `409` if the session is already completed.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SaveAnswerRequest'
+            example:
+              stepId: name
+              value: Ada
+              answeredAt: '2026-10-02T10:15:30Z'
+      responses:
+        '200':
+          description: Answer saved.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Answer'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '409':
+          $ref: '#/components/responses/Conflict'
+
+  /conversation-sessions/{sessionId}/complete:
+    parameters:
+      - $ref: '#/components/parameters/SessionId'
+    post:
+      tags: [Sessions]
+      operationId: completeConversationSession
+      summary: Mark the conversation as finished
+      description: Idempotent; completing an already completed session returns it unchanged.
+      responses:
+        '200':
+          description: Session completed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationSession'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+security:
+  - sessionToken: []
+
+components:
+  securitySchemes:
+    sessionToken:
+      type: http
+      scheme: bearer
+      description: The `sessionToken` returned when the session was created.
+
+  parameters:
+    SessionId:
+      name: sessionId
+      in: path
+      required: true
+      schema:
+        type: string
+        format: uuid
+    AnswerKey:
+      name: answerKey
+      in: path
+      required: true
+      description: Matches `answerKey` in the frontend flow (for example `name` or `goal`).
+      schema:
+        $ref: '#/components/schemas/AnswerKey'
+
+  schemas:
+    AnswerKey:
+      type: string
+      pattern: '^\w{1,64}$'
+      examples: [name, goal]
+
+    CreateSessionRequest:
+      type: object
+      additionalProperties: false
+      required: [flowId, flowVersion]
+      properties:
+        flowId:
+          type: string
+          pattern: '^[a-z0-9-]{1,64}$'
+          description: Which conversation flow is being answered.
+        flowVersion:
+          type: integer
+          minimum: 1
+          description: Increase when steps change so old answers stay interpretable.
+        locale:
+          type: string
+          maxLength: 35
+          description: BCP 47 language tag of the visitor's browser.
+
+    CreatedSession:
+      allOf:
+        - $ref: '#/components/schemas/ConversationSession'
+        - type: object
+          required: [sessionToken]
+          properties:
+            sessionToken:
+              type: string
+              description: Returned only once. Store a hash server-side, never the raw token.
+
+    ConversationSession:
+      type: object
+      required: [id, flowId, flowVersion, status, answers, createdAt, updatedAt]
+      properties:
+        id:
+          type: string
+          format: uuid
+        flowId:
+          type: string
+        flowVersion:
+          type: integer
+        status:
+          type: string
+          enum: [in_progress, completed]
+        answers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Answer'
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+        completedAt:
+          type: [string, 'null']
+          format: date-time
+
+    SaveAnswerRequest:
+      type: object
+      additionalProperties: false
+      required: [stepId, value]
+      properties:
+        stepId:
+          type: string
+          maxLength: 64
+          description: Step `id` in the frontend flow that asked the question.
+        value:
+          type: string
+          minLength: 1
+          maxLength: 80
+          description: Trimmed answer text; the frontend allows up to 80 characters.
+        answeredAt:
+          type: string
+          format: date-time
+          description: Client time of submission; the server also records its own time.
+
+    Answer:
+      type: object
+      required: [answerKey, stepId, value, savedAt]
+      properties:
+        answerKey:
+          $ref: '#/components/schemas/AnswerKey'
+        stepId:
+          type: string
+        value:
+          type: string
+        answeredAt:
+          type: string
+          format: date-time
+        savedAt:
+          type: string
+          format: date-time
+
+    Problem:
+      type: object
+      description: RFC 9457 problem details. Never include stack traces or internal data.
+      required: [type, title, status]
+      properties:
+        type:
+          type: string
+          format: uri-reference
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        errors:
+          type: array
+          description: Field-level validation failures.
+          items:
+            type: object
+            required: [field, message]
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+
+  responses:
+    ValidationError:
+      description: The request body or parameters are invalid.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+          example:
+            type: about:blank
+            title: Invalid request
+            status: 400
+            errors:
+              - field: value
+                message: Must be between 1 and 80 characters.
+    Unauthorized:
+      description: Missing or invalid session token.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    NotFound:
+      description: The session does not exist.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    Conflict:
+      description: The session is already completed.
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'
+    TooManyRequests:
+      description: Too many sessions created from this client.
+      headers:
+        Retry-After:
+          schema:
+            type: integer
+      content:
+        application/problem+json:
+          schema:
+            $ref: '#/components/schemas/Problem'

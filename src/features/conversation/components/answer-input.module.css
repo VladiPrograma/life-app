@@ -1,0 +1,90 @@
+.form {
+  margin: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.input {
+  width: min(300px, 62vw);
+  min-width: 0;
+  padding: 4px 0 6px;
+  border: 0;
+  border-bottom: 1px solid var(--color-border);
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-copy);
+  caret-color: var(--color-primary);
+  font: inherit;
+  font-weight: 500;
+  letter-spacing: inherit;
+  outline: none;
+  transition: border-color 160ms ease;
+}
+
+.input::placeholder {
+  color: var(--color-copy-lighter);
+  opacity: 1;
+}
+
+.input:focus-visible {
+  border-bottom-color: var(--color-copy);
+}
+
+.input[aria-invalid='true'] {
+  border-bottom-color: var(--color-error);
+}
+
+.submit {
+  display: grid;
+  flex: none;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1.5px solid var(--color-copy);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-copy);
+  cursor: pointer;
+  transition:
+    background-color 160ms ease,
+    color 160ms ease;
+}
+
+.submit:hover {
+  background: var(--color-copy);
+  color: var(--color-foreground);
+}
+
+.submit:focus-visible {
+  outline: 2px solid var(--color-primary);
+  outline-offset: 3px;
+}
+
+.hint {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.4;
+  color: var(--color-error);
+}
+
+.hint:empty {
+  display: none;
+}
+
+.hint:not(:empty) {
+  margin-top: 8px;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}

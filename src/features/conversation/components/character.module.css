@@ -1,0 +1,127 @@
+.character {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.guide {
+  --character-size: 136px;
+}
+
+.player {
+  --character-size: 84px;
+}
+
+@media (min-width: 720px) {
+  .guide {
+    --character-size: clamp(200px, 22vw, 296px);
+  }
+
+  .player {
+    --character-size: clamp(112px, 11vw, 148px);
+  }
+}
+
+.figure {
+  width: var(--character-size);
+  height: var(--character-size);
+}
+
+.guide .figure {
+  animation: float 4.8s ease-in-out infinite;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.guideBody,
+.playerBody {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 1.5px solid var(--color-copy);
+  border-radius: 50%;
+  background: var(--color-foreground);
+}
+
+.eye {
+  position: absolute;
+  top: 38%;
+  width: 7%;
+  height: 14%;
+  border-radius: 999px;
+  background: var(--color-copy);
+  animation: blink 6s ease-in-out infinite;
+}
+
+.eye:first-child {
+  left: 54%;
+}
+
+.eye:last-child {
+  left: 70%;
+}
+
+.playerBody {
+  display: grid;
+  place-items: center;
+}
+
+.unknownMark {
+  font-family: var(--font-display);
+  font-size: calc(var(--character-size) * 0.52);
+  font-weight: 500;
+  line-height: 1;
+  color: var(--color-copy);
+  /* Optical centering: the glyph sits slightly high in its line box. */
+  transform: translateY(4%);
+}
+
+.shadow {
+  width: calc(var(--character-size) * 0.62);
+  height: calc(var(--character-size) * 0.07);
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-copy) 9%, transparent);
+}
+
+.guide .shadow {
+  animation: shadow-breathe 4.8s ease-in-out infinite;
+}
+
+@keyframes float {
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes shadow-breathe {
+  50% {
+    transform: scaleX(0.88);
+    opacity: 0.7;
+  }
+}
+
+@keyframes blink {
+  0%,
+  94%,
+  100% {
+    transform: scaleY(1);
+  }
+
+  97% {
+    transform: scaleY(0.1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guide .figure,
+  .guide .shadow,
+  .eye {
+    animation: none;
+  }
+}
