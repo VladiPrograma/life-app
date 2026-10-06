@@ -1,6 +1,6 @@
 # Life App frontend foundation
 
-A React application built from supplied designs. Its first feature, `src/features/conversation/`, is a sequential, videogame-style dialogue scene driven by a data-only flow (`demo-conversation.ts`). It uses CSS Modules at the brief's request; there is no routing, remote data, or component library yet.
+A React application built from supplied designs. Its first feature, `src/features/conversation/`, is a sequential, videogame-style dialogue scene driven by a data-only flow (`demo-conversation.ts`) at `/chat`. It uses CSS Modules at the brief's request and React Router for navigation; there is no remote data or component library yet. The root route `/` temporarily redirects to `/chat` until the home page is defined. Unknown routes show a minimal page-not-found message.
 
 ## Mandatory project skill
 
@@ -20,7 +20,7 @@ npx playwright install chromium
 npm run dev
 ```
 
-Open the local URL printed by Vite. No `.env` file is required. For Linux browser system dependencies, use `npx playwright install --with-deps chromium`.
+Open `/chat` at the local URL printed by Vite. No `.env` file is required. For Linux browser system dependencies, use `npx playwright install --with-deps chromium`.
 
 ## Architecture
 
@@ -29,7 +29,7 @@ src/
   app/
     app.tsx              Application composition and minimal shell
     providers/           Reserved for providers with actual consumers
-    router/              Reserved for routing when routes exist
+    router/              Route definitions and temporary home redirect
     styles/app.css       Tailwind entry and global browser defaults
   features/              Future domain modules, created only as needed
   components/
@@ -53,7 +53,7 @@ Feature folders may contain `api/`, `components/`, `hooks/`, `schemas/`, `types/
 
 Application composition depends on features; features may depend on shared components and libraries. Shared code must not depend on features or application composition. ESLint prevents those reverse alias imports, deep relative imports, and decentralized environment access. Cross-feature orchestration belongs in `app/`; the dependency policy also applies to imports not statically covered by lint.
 
-The runtime dependencies are React, React DOM, and Zod. Routing, TanStack Query, and React Hook Form are deferred until real routing, remote state, or non-trivial forms justify them. No extra providers or speculative UI primitives are needed for the shell. TypeScript 6.0.3 is pinned for compatibility with typed ESLint; jsdom 28 supports the validated Node version.
+The runtime dependencies are React, React DOM, React Router, and Zod. React Router uses declarative routes with a browser router at startup. Version 7.18.4 supports the project's pinned Node version. TanStack Query and React Hook Form are deferred until remote state or non-trivial forms justify them. No extra providers or speculative UI primitives are needed for the shell. TypeScript 6.0.3 is pinned for compatibility with typed ESLint; jsdom 28 supports the validated Node version.
 
 ## Commands
 
@@ -113,6 +113,6 @@ Unevidenced Tailwind palette, typography, radius, shadow, breakpoint, and contai
 
 `.env.example` documents the empty configuration contract. `src/lib/env.ts` validates Vite's `BASE_URL` and `MODE` at startup and is the only application module allowed to read `import.meta.env`. Add custom variables to that schema and `.env.example` when needed, with useful validation messages. Required settings should fail early rather than cause later undefined behavior. All `VITE_*` values are public build-time data; credentials belong on a server, never in this repository or the client bundle.
 
-`npm run build` produces static assets in `dist/`. `npm run preview` is a local inspection server, not a production host. Select deployment configuration, SPA fallback rules, API behavior, and required environment settings when hosting and actual routes are known. No deployment is configured or performed by this foundation.
+`npm run build` produces static assets in `dist/`. `npm run preview` is a local inspection server, not a production host. Production hosting must serve `index.html` for application routes such as `/chat` so direct visits and refreshes work; Vite handles this locally. Select the host-specific SPA fallback, API behavior, and required environment settings when hosting is defined. No deployment is configured or performed by this foundation.
 
 The included GitHub Actions workflow uses Windows and runs the complete quality gate, retaining reports on failure. Read [AGENTS.md](AGENTS.md) before contributing; it defines the design-fidelity and validation contract for humans and autonomous agents.

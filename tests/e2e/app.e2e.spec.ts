@@ -3,7 +3,7 @@ import { expect, test } from '../fixtures';
 test('loads the conversation scene without errors or horizontal overflow', async ({
   page,
 }) => {
-  await page.goto('/');
+  await page.goto('/chat');
 
   await expect(page).toHaveTitle('Life App');
   await expect(page.getByRole('main')).toBeVisible();
@@ -21,7 +21,7 @@ test('loads the conversation scene without errors or horizontal overflow', async
 });
 
 test('answers the questions with the keyboard', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/chat');
 
   // The last match is the visible typed line; earlier ones are for assistive tech and layout.
   await expect(
@@ -65,4 +65,20 @@ test('answers the questions with the keyboard', async ({ page }) => {
       .last(),
   ).toBeVisible();
   await expect(page.getByRole('textbox')).toHaveCount(0);
+});
+
+test('temporarily redirects the home route to chat', async ({ page }) => {
+  await page.goto('/');
+
+  await expect(page).toHaveURL(/\/chat$/);
+  await expect(page.getByRole('img', { name: 'Guide' })).toBeVisible();
+});
+
+test('loads chat directly after a browser refresh', async ({ page }) => {
+  await page.goto('/chat');
+  await expect(page.getByRole('button', { name: 'Continue' })).toBeFocused();
+  await page.reload();
+
+  await expect(page).toHaveURL(/\/chat$/);
+  await expect(page.getByRole('button', { name: 'Continue' })).toBeFocused();
 });

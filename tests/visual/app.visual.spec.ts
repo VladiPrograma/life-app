@@ -2,7 +2,7 @@ import { expect, test } from '../fixtures';
 
 test.beforeEach(async ({ page }) => {
   await page.clock.setFixedTime(new Date('2026-01-01T12:00:00Z'));
-  await page.goto('/');
+  await page.goto('/chat');
   await page.evaluate(() => document.fonts.ready);
 });
 
