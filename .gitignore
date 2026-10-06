@@ -1,14 +1,54 @@
+# Dependencies and local package caches
 node_modules/
-.idea/
+.npm/
+
+# Build output and tool caches
 dist/
+.vite/
+.cache/
+*.tsbuildinfo
+.eslintcache
+.prettiercache
+
+# Generated test artifacts and local browser sessions
+# Keep reviewed baselines in tests/visual/__screenshots__/ tracked.
 coverage/
+.nyc_output/
 playwright-report/
 test-results/
-*.tsbuildinfo
+blob-report/
+playwright/.cache/
+playwright/.auth/
+
+# Local environment settings (keep the shared example)
 *.local
 .env
 .env.*
 !.env.example
+
+# Editor settings and temporary files
+.idea/
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.history/
+*.swp
+*.swo
+*~
+*.tmp
+*.temp
+/tmp/
+/temp/
+
+# Operating system metadata
 .DS_Store
+._*
 Thumbs.db
+Desktop.ini
+
+# Local logs and Node.js diagnostic reports
 *.log
+logs/
+report.*.json

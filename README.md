@@ -1,6 +1,6 @@
 # Life App frontend foundation
 
-A minimal React application prepared for implementation from supplied designs. It deliberately contains no product features, navigation, API calls, forms, or invented component library. The single “Application ready” heading proves mounting and browser rendering.
+A React application built from supplied designs. Its first feature, `src/features/conversation/`, is a sequential, videogame-style dialogue scene driven by a data-only flow (`demo-conversation.ts`). It uses CSS Modules at the brief's request; there is no routing, remote data, or component library yet.
 
 ## Mandatory project skill
 
@@ -78,9 +78,9 @@ After changes, run `npm run format` and `npm run check`. Browser suites each own
 
 ## Testing and browser inspection
 
-Vitest uses jsdom, explicit test imports, DOM matchers, and automatic cleanup. The shell test proves accessible rendering; environment tests verify schema rejection. Add behavior-focused tests near the affected module rather than testing implementation details or chasing coverage.
+Vitest uses jsdom, explicit test imports, DOM matchers, and automatic cleanup. Component tests walk the conversation flow; environment tests verify schema rejection. Add behavior-focused tests near the affected module rather than testing implementation details or chasing coverage.
 
-Playwright tests Chromium at **390×844**, **768×1024**, **1366×768**, and **1920×1080**. These are validation viewports, not approved responsive design breakpoints. Both suites fail on unexpected console warnings/errors, uncaught runtime errors, failed requests, and HTTP errors. The smoke test checks the main landmark, heading, title, and horizontal overflow. Failure screenshots and traces are written under `test-results/`, with an HTML report under `playwright-report/`.
+Playwright tests Chromium at **390×844**, **768×1024**, **1366×768**, and **1920×1080**. These are validation viewports, not approved responsive design breakpoints. Both suites fail on unexpected console warnings/errors, uncaught runtime errors, failed requests, and HTTP errors. The e2e suite checks the scene, horizontal overflow, and a keyboard-only walk through the conversation. Failure screenshots and traces are written under `test-results/`, with an HTML report under `playwright-report/`.
 
 For interactive inspection, run `npm run test:e2e -- --headed --project=e2e-laptop`, or open the Vite dev URL. Test keyboard behavior and every relevant state as features are added. The initial scope has no interactions or asynchronous data states. Browser coverage currently means Chromium; add Firefox/WebKit when product browser support is defined.
 
@@ -88,7 +88,7 @@ On Windows PowerShell, use `npm.cmd` instead of `npm` when forwarding extra argu
 
 ## Visual regression and design handoff
 
-The checked-in shell screenshots prove the regression pipeline only; they are **not an approved product design**. The tests pin locale, timezone, color scheme, reduced motion, scale, viewport, and clock, wait for fonts, and disable screenshot animations. Future tests must also fixture remote data, localize assets, control randomness, and wait for explicit stable UI states. Do not use arbitrary sleeps.
+The checked-in screenshots cover the conversation opening line and a question with a typed answer. The tests pin locale, timezone, color scheme, reduced motion, scale, viewport, and clock, wait for fonts, and disable screenshot animations. Future tests must also fixture remote data, localize assets, control randomness, and wait for explicit stable UI states. Do not use arbitrary sleeps.
 
 1. Inspect the entire supplied reference, responsive variants, exact fonts/assets, and states.
 2. Implement the UI and run it at the reference dimensions plus representative responsive widths.

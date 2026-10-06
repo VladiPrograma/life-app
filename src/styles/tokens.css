@@ -26,6 +26,8 @@
   --color-secondary-light: #7f9871;
 
   --color-background: #efeff1;
+  /* Warm off-white requested for the conversation scene. */
+  --color-scene: #f7f7f5;
   --color-foreground: #fbfbfb;
   --color-border: #dedde2;
 
