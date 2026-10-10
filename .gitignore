@@ -4,7 +4,10 @@ node_modules/
 
 # Build output and tool caches
 dist/
+dist-ssr/
 .vite/
+vite.config.*.timestamp-*
+stats.html
 .cache/
 *.tsbuildinfo
 .eslintcache
@@ -26,6 +29,20 @@ playwright/.auth/
 .env.*
 !.env.example
 
+# Private keys and certificates
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Local deployment tool state
+.vercel/
+.netlify/
+
+# Local AI agent settings (shared instructions stay tracked)
+.claude/settings.local.json
+CLAUDE.local.md
+
 # Editor settings and temporary files
 .idea/
 .vscode/*
@@ -34,6 +51,8 @@ playwright/.auth/
 !.vscode/tasks.json
 !.vscode/launch.json
 .history/
+.fleet/
+*.sublime-workspace
 *.swp
 *.swo
 *~
@@ -47,6 +66,8 @@ playwright/.auth/
 ._*
 Thumbs.db
 Desktop.ini
+ehthumbs.db
+$RECYCLE.BIN/
 
 # Local logs and Node.js diagnostic reports
 *.log
