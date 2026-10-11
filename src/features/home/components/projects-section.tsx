@@ -17,15 +17,15 @@ export function ProjectsSection() {
     <section
       id="projects"
       aria-labelledby="projects-title"
-      className="scroll-mt-4 overflow-clip border-b-[3px] border-ink bg-night text-paper"
+      className="scroll-mt-4 overflow-clip border-b-3 border-ink bg-night text-paper"
     >
       <div className="mx-auto grid max-w-[1707px] lg:grid-cols-[minmax(0,41fr)_minmax(0,59fr)]">
-        <div className="px-4 pt-14 md:px-10 lg:col-start-2 lg:row-start-1 lg:border-l-2 lg:border-line lg:px-8 lg:pt-20">
+        <div className="px-4 pt-16 md:px-10 lg:col-start-2 lg:row-start-1 lg:border-l-2 lg:border-line lg:px-8 lg:pt-24">
           <h2
             id="projects-title"
-            className="font-display text-[clamp(40px,4.4vw,74px)] leading-none font-black tracking-[-0.03em] uppercase"
+            className="font-display text-h2 leading-none font-black uppercase"
           >
-            <span className="text-gold">Damn!</span>{' '}
+            <span className="text-yellow">Damn!</span>{' '}
             <span className="italic">I built this?</span>
           </h2>
         </div>
@@ -51,11 +51,11 @@ export function ProjectsSection() {
                   aria-pressed={isActive}
                   onClick={() => setActiveNumber(project.number)}
                   onFocus={() => setActiveNumber(project.number)}
-                  className={`group col-span-2 grid grid-cols-subgrid items-center text-left transition-colors duration-150 hover:text-paper focus-visible:outline-[3px] focus-visible:outline-offset-[6px] focus-visible:outline-gold ${
+                  className={`group col-span-2 grid grid-cols-subgrid items-center text-left transition-colors duration-150 hover:text-paper focus-visible:outline-3 focus-visible:outline-offset-[6px] focus-visible:outline-yellow ${
                     isActive ? 'text-paper' : 'text-paper/60'
                   }`}
                 >
-                  <span className="font-display text-[clamp(28px,2.4vw,42px)] leading-[0.95] font-black tracking-[-0.03em] uppercase [overflow-wrap:anywhere]">
+                  <span className="font-display text-h3 leading-none font-black tracking-tight uppercase [overflow-wrap:anywhere]">
                     {project.title}
                   </span>
                   <ArrowUpRightIcon
@@ -72,7 +72,7 @@ export function ProjectsSection() {
                   {project.tags.map((tag, index) => (
                     <li
                       key={tag}
-                      className={`rounded-[6px] border-[2.5px] border-ink px-2.5 py-1.5 font-mono text-[13px] leading-none font-black text-ink uppercase transition-[translate,box-shadow] duration-150 ${
+                      className={`rounded-md border-3 border-ink px-2.5 py-1.5 font-mono text-xs leading-none font-black text-ink uppercase transition-[translate,box-shadow] duration-150 ${
                         tagColors[index % tagColors.length]
                       } ${isActive ? '-translate-y-1 shadow-brutal' : ''}`}
                     >

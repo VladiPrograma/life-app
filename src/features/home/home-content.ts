@@ -36,11 +36,10 @@ import viscoScreenshot from '@/assets/projects/visco.webp';
 
 // Content follows Vlad's CV.
 export const profile = {
-  name: 'Vlad Dumitru Dinca',
   shortName: 'Vlad Dinca',
   role: 'Senior Software Engineer',
   location: 'Zaragoza, Spain',
-  available: 'Available',
+  available: 'Available soon',
   email: 'mdumitruvlad@gmail.com',
 } as const;
 
@@ -151,7 +150,7 @@ export const aboutBioInvite: readonly BioSegment[] = [
   ', so now that you’re here, don’t hesitate to say hi:',
 ];
 
-export type CareerJobId = 'renfe' | 'geoportail' | 'securitas';
+type CareerJobId = 'renfe' | 'geoportail' | 'securitas';
 
 export type CareerJob = {
   id: CareerJobId;
@@ -278,16 +277,23 @@ export const aboutAdventuresText: readonly (readonly BioSegment[])[] = [
     { text: 'nature', highlight: 'green' },
     ' and woke up my ',
     { text: 'adventurous spirit', highlight: 'sky' },
-    ': the urge to get out there and explore. I try to document it all on Instagram.',
+    ': the urge to get out there and explore.',
+  ],
+  [
+    'Don’t get me wrong, I ',
+    { text: 'love software', highlight: 'yellow' },
+    '. But sitting for 8 hours a day, sometimes 12, gets heavy when another 8 go to sleep. That’s why I need ',
+    { text: 'extreme sports', highlight: 'pink' },
+    ' and a dose of strong emotions every now and then, and that’s why the motorbike.',
+  ],
+  [
+    'A friend and I recently bought a ',
+    { text: 'Kawasaki Ninja 250R', highlight: 'sky' },
+    ' together, and we’re getting into the track world: learning to race and to lean the bike into corners at the ',
+    { text: 'Circuito Internacional de Zuera', highlight: 'green' },
+    '. I try to document it all on Instagram.',
   ],
 ];
-
-export const aboutQuests = [
-  { title: 'Climbing', status: 'Ongoing', className: 'bg-green' },
-  { title: 'Hiking', status: 'Ongoing', className: 'bg-sky' },
-  { title: 'Riding', status: 'Ongoing', className: 'bg-yellow' },
-  { title: 'Cabin in the woods', status: 'Someday', className: 'bg-pink' },
-] as const;
 
 const instagramHref =
   socialLinks.find((link) => link.label === 'Instagram')?.href ?? '';
@@ -313,34 +319,28 @@ export type AboutTabId = (typeof aboutTabs)[number]['id'];
 // The reference shows the stats tab (now Tech) selected.
 export const defaultAboutTab: AboutTabId = 'tech';
 
-export type AboutEquipmentItem = {
-  label: string;
-  className: string;
-  /** Fluent Emoji illustration (Microsoft, MIT). */
-  icon: string;
-};
-
-export type AboutScene = {
-  /** Fill behind the artwork, visible while the image is a placeholder. */
-  backdropClassName: string;
-  /** Describes the artwork; the placeholder announces it until it exists. */
-  imageLabel: string;
-  image?: {
+type AboutScene = {
+  image: {
     src: string;
+    alt: string;
     width: number;
     height: number;
     /** CSS object-position keeping the subject inside the 6:5 arch. */
     position?: string;
   };
-  equipment: readonly AboutEquipmentItem[];
+  /** `icon` is a Fluent Emoji illustration (Microsoft, MIT). */
+  equipment: readonly { label: string; className: string; icon: string }[];
 };
 
 // Artwork and equipment shown beside the player card for each tab.
 export const aboutScenes: Record<AboutTabId, AboutScene> = {
   bio: {
-    backdropClassName: 'bg-cream',
-    imageLabel: `${profile.shortName} riding his Kawasaki Ninja 500`,
-    image: { src: vladMoto, width: 1200, height: 1000 },
+    image: {
+      src: vladMoto,
+      alt: `${profile.shortName} riding his Kawasaki Ninja 500`,
+      width: 1200,
+      height: 1000,
+    },
     equipment: [
       { label: 'Motorbike', className: 'bg-yellow', icon: motorcycleEmoji },
       { label: 'Road', className: 'bg-pink', icon: motorwayEmoji },
@@ -348,9 +348,12 @@ export const aboutScenes: Record<AboutTabId, AboutScene> = {
     ],
   },
   tech: {
-    backdropClassName: 'bg-cream',
-    imageLabel: `${profile.shortName} coding at his desk`,
-    image: { src: vladTech, width: 1200, height: 1000 },
+    image: {
+      src: vladTech,
+      alt: `${profile.shortName} coding at his desk`,
+      width: 1200,
+      height: 1000,
+    },
     equipment: [
       { label: 'Laptop', className: 'bg-sky', icon: laptopEmoji },
       { label: 'Coffee', className: 'bg-yellow', icon: hotBeverageEmoji },
@@ -358,9 +361,13 @@ export const aboutScenes: Record<AboutTabId, AboutScene> = {
     ],
   },
   personal: {
-    backdropClassName: 'bg-cream',
-    imageLabel: `${profile.shortName} holding a potted plant in front of a colourful wall`,
-    image: { src: vladPlant, width: 1086, height: 1448, position: '50% 11%' },
+    image: {
+      src: vladPlant,
+      alt: `${profile.shortName} holding a potted plant in front of a colourful wall`,
+      width: 1086,
+      height: 1448,
+      position: '50% 11%',
+    },
     equipment: [
       { label: 'Plant', className: 'bg-green', icon: pottedPlantEmoji },
       { label: 'Books', className: 'bg-yellow', icon: booksEmoji },
@@ -368,10 +375,9 @@ export const aboutScenes: Record<AboutTabId, AboutScene> = {
     ],
   },
   adventures: {
-    backdropClassName: 'bg-sky',
-    imageLabel: `${profile.shortName} rock climbing`,
     image: {
       src: vladAdventures,
+      alt: `${profile.shortName} rock climbing`,
       width: 1086,
       height: 1448,
       position: '50% 37%',
@@ -437,7 +443,6 @@ export type Project = {
   number: string;
   title: string;
   context: string;
-  description: string;
   tags: readonly string[];
   image: { src: string; alt: string };
   /** Public website, opened in a new tab from the preview. */
@@ -449,8 +454,6 @@ export const projects: readonly Project[] = [
     number: '01',
     title: 'Verisure Platform',
     context: 'Securitas Direct · Backend Lead',
-    description:
-      'Migrated a legacy Java wrapper to Java 17 microservices on a decoupled multi-module hexagonal architecture, cutting critical queries from 3 minutes to 12 seconds.',
     tags: ['Java 17', 'Spring Boot', 'Redis', 'SonarQube'],
     liveUrl: 'https://www.verisure.es',
     image: {
@@ -462,8 +465,6 @@ export const projects: readonly Project[] = [
     number: '02',
     title: 'MotoGP App',
     context: 'MotoGP & Estrella Galicia · Backend',
-    description:
-      'Serverless backend for VIP user management in a MotoGP mobile app, built on AWS Lambda with gateways, request handlers and an Amazon Aurora schema.',
     tags: ['AWS Lambda', 'API Gateway', 'Aurora'],
     liveUrl: 'https://www.motogp.com/en/apps',
     image: {
@@ -475,8 +476,6 @@ export const projects: readonly Project[] = [
     number: '03',
     title: 'Cierzo Sports',
     context: 'End-to-End Developer',
-    description:
-      'Full platform for an international volleyball tournament in Zaragoza: secure sign-up and online payments for hundreds of players, plus an organizers’ intranet.',
     tags: ['Frontend', 'Backend', 'Payments', 'Hosting'],
     liveUrl: 'https://cierzolgtb.org',
     image: {
@@ -488,8 +487,6 @@ export const projects: readonly Project[] = [
     number: '04',
     title: 'Elisa Designer',
     context: 'End-to-End Developer',
-    description:
-      'Modern portfolio website for a designer, with smooth animations and an interactive UI that puts the creative work first.',
     tags: ['Frontend', 'Animations', 'Deployment'],
     liveUrl: 'https://elisandesign.com',
     image: {
@@ -501,8 +498,6 @@ export const projects: readonly Project[] = [
     number: '05',
     title: 'Visco',
     context: 'Web Agency · End-to-End Developer',
-    description:
-      'Landing page for Visco, a web design agency: a bold hero with a clear call to action, a product mockup and a scrolling band of client logos.',
     tags: ['Frontend', 'Landing Page', 'Branding'],
     liveUrl: 'https://visco.uno',
     image: {

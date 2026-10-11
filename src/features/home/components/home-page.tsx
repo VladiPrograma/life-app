@@ -20,7 +20,7 @@ export function HomePage() {
         <ProjectsSection />
         <SectionTicker
           items={valuesTicker}
-          className="border-b-[3px] border-ink bg-yellow text-ink"
+          className="border-b-3 border-ink bg-yellow text-ink"
           separatorClassName="text-pink"
         />
         <AboutSection />

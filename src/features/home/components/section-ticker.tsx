@@ -10,7 +10,7 @@ type SectionTickerProps = {
 
 // Each run must be wider than the widest screen, or the strip shows an empty
 // gap until the second run scrolls in. Characters stand in for width: at
-// 17px mono, ~280 characters (padding and separators counted as 5 each)
+// 16px mono, ~280 characters (padding and separators counted as 5 each)
 // spans more than 2560px.
 const minRunCharacters = 280;
 const characterPerItemOverhead = 5;
@@ -55,7 +55,7 @@ export function SectionTicker({
   return (
     <div
       aria-hidden="true"
-      className={`relative overflow-hidden py-3.5 font-mono text-[15px] leading-none font-black whitespace-nowrap uppercase md:text-[17px] ${className}`}
+      className={`relative overflow-hidden py-3.5 font-mono text-sm leading-none font-black whitespace-nowrap uppercase md:text-base ${className}`}
     >
       {/* Two identical runs so a -50% translation loops seamlessly. */}
       <div

@@ -11,7 +11,6 @@ import {
   aboutBio,
   aboutBioInvite,
   aboutPanelLinks,
-  aboutQuests,
   aboutPersonal,
   aboutReading,
   aboutTabs as tabs,
@@ -104,7 +103,7 @@ export function AboutPlayerCard({
               aria-controls={`${baseId}-panel-${tab.id}`}
               tabIndex={isActive ? 0 : -1}
               onClick={() => setActiveTab(tab.id)}
-              className={`-mb-[3px] rounded-t-[8px] border-[3px] border-ink px-4 pt-2.5 pb-2 font-mono text-[15px] leading-none font-bold whitespace-nowrap uppercase transition-colors duration-150 focus-visible:outline-[3px] focus-visible:-outline-offset-[7px] focus-visible:outline-ink md:px-6 md:text-[17px] ${
+              className={`-mb-[3px] rounded-t-lg border-3 border-ink px-4 pt-2.5 pb-2 font-mono text-sm leading-none font-bold whitespace-nowrap uppercase transition-colors duration-150 focus-visible:outline-3 focus-visible:-outline-offset-[7px] focus-visible:outline-ink md:px-6 md:text-base ${
                 isActive ? tabColors[tab.id].active : tabColors[tab.id].idle
               }`}
             >
@@ -116,7 +115,7 @@ export function AboutPlayerCard({
 
       {/* All panels share one grid cell so switching tabs never changes the
           card height. Inactive panels stay hidden and inert. */}
-      <div className="grid grow rounded-tr-[8px] rounded-b-[8px] border-[3px] border-ink bg-cream px-4 pt-6 pb-6 text-ink shadow-[6px_6px_0_var(--color-ink)] md:px-7">
+      <div className="grid grow rounded-tr-lg rounded-b-lg border-3 border-ink bg-cream px-4 py-6 text-ink shadow-brutal-lg md:px-7">
         {tabs.map((tab) => {
           const isActive = tab.id === activeTab;
           return (
@@ -161,7 +160,7 @@ function PanelTitle({
 }) {
   return (
     <h3
-      className={`inline-block -rotate-1 self-start border-[3px] border-ink px-3 py-1 font-display text-[clamp(26px,2.8vw,38px)] leading-[1.05] font-black tracking-[-0.02em] uppercase shadow-[5px_5px_0_var(--color-ink)] ${className}`}
+      className={`inline-block -rotate-1 self-start border-3 border-ink px-3 py-1 font-display text-h3 leading-tight font-black uppercase shadow-brutal ${className}`}
     >
       {children}
     </h3>
@@ -184,7 +183,7 @@ function HighlightedText({ segments }: { segments: readonly BioSegment[] }) {
     ) : (
       <mark
         key={segment.text}
-        className={`rounded-[3px] box-decoration-clone px-1 font-bold text-ink ${highlightClassNames[segment.highlight]}`}
+        className={`rounded-sm box-decoration-clone px-1 font-bold text-ink ${highlightClassNames[segment.highlight]}`}
       >
         {segment.text}
       </mark>
@@ -202,14 +201,14 @@ function BioPanel() {
             key={index}
             className={
               index === 0
-                ? 'font-display text-[clamp(26px,2.6vw,34px)] leading-[1.2] font-black tracking-[-0.02em]'
-                : 'mt-3 text-[16px] leading-[1.6]'
+                ? 'font-display text-lead leading-[1.2] font-black tracking-tight'
+                : 'mt-3 text-base leading-relaxed'
             }
           >
             <HighlightedText segments={paragraph} />
           </p>
         ))}
-        <p className="mt-3 text-[16px] leading-[1.6]">
+        <p className="mt-3 text-base leading-relaxed">
           <HighlightedText segments={aboutBioInvite} />
         </p>
         <div className="mt-5">
@@ -243,13 +242,13 @@ function TechPanel() {
     <>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
         <PanelTitle className="bg-sky">Skill tree</PanelTitle>
-        <p className="font-mono text-[14px] leading-none font-bold uppercase">
+        <p className="font-mono text-sm leading-none font-bold uppercase">
           {profile.role}
         </p>
       </div>
 
       {/* Legend: one square per half-year, coloured by employer. */}
-      <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-[13px] leading-none font-bold uppercase">
+      <div className="mt-6 flex flex-wrap items-center gap-x-4 gap-y-2 font-mono text-xs leading-none font-bold uppercase">
         {jobs.map(({ job }) => (
           <span key={job.id} className="inline-flex items-center gap-1.5">
             <span
@@ -272,12 +271,12 @@ function TechPanel() {
         {techs.map((tech) => (
           <li
             key={tech.name}
-            className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1.5 rounded-[4px] border-[1.5px] border-ink/40 px-3 py-1.5 md:grid-cols-[minmax(0,9em)_minmax(0,1fr)_4.5em]"
+            className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-x-3 gap-y-1.5 rounded-sm border-2 border-ink/40 px-3 py-1.5 md:grid-cols-[minmax(0,9em)_minmax(0,1fr)_4.5em]"
           >
-            <span className="font-mono text-[15px] leading-none font-bold uppercase md:text-[16px]">
+            <span className="font-mono text-sm leading-none font-bold uppercase md:text-base">
               {tech.name}
             </span>
-            <span className="text-right font-mono text-[13px] leading-none font-bold md:order-last">
+            <span className="text-right font-mono text-xs leading-none font-bold md:order-last">
               <span className="sr-only">: </span>
               {formatHalfYears(tech.total)}
             </span>
@@ -285,13 +284,13 @@ function TechPanel() {
                     remaining squares stay empty up to the full career. */}
             <span
               aria-hidden="true"
-              className="col-span-2 flex h-6 border-[3px] border-ink bg-paper md:col-span-1"
+              className="col-span-2 flex h-6 border-3 border-ink bg-paper md:col-span-1"
             >
               {tech.usedJobs.flatMap(({ job, halfYears }) =>
                 Array.from({ length: halfYears }, (_, index) => (
                   <span
                     key={`${job.id}-${index}`}
-                    className={`grow border-r-[2px] border-ink last:border-r-0 ${job.className}`}
+                    className={`grow border-r-2 border-ink last:border-r-0 ${job.className}`}
                   />
                 )),
               )}
@@ -300,7 +299,7 @@ function TechPanel() {
                 (_, index) => (
                   <span
                     key={`empty-${index}`}
-                    className="grow border-r-[2px] border-ink last:border-r-0"
+                    className="grow border-r-2 border-ink last:border-r-0"
                   />
                 ),
               )}
@@ -321,25 +320,22 @@ function PersonalPanel() {
 
       <div className="mt-5">
         {aboutPersonal.map((paragraph, index) => (
-          <p
-            key={index}
-            className="mt-3 text-[16px] leading-[1.6] first:mt-0 md:text-[17px]"
-          >
+          <p key={index} className="mt-3 text-base leading-relaxed first:mt-0">
             <HighlightedText segments={paragraph} />
           </p>
         ))}
       </div>
 
-      <div className="mt-7 flex -rotate-[0.6deg] items-center gap-4 self-start border-[3px] border-ink bg-yellow px-4 py-3 shadow-[5px_5px_0_var(--color-ink)]">
+      <div className="mt-7 flex -rotate-[0.6deg] items-center gap-4 self-start border-3 border-ink bg-yellow px-4 py-3 shadow-brutal">
         <BookIcon className="size-10 shrink-0" />
         <p className="leading-none">
-          <span className="block font-mono text-[13px] font-bold uppercase">
+          <span className="block font-mono text-xs font-bold uppercase">
             Now reading
           </span>
-          <span className="mt-1.5 block font-display text-[clamp(20px,2vw,26px)] font-black tracking-[-0.02em]">
+          <span className="mt-1.5 block font-display text-lead font-black tracking-tight">
             {aboutReading.title}
           </span>
-          <span className="mt-1 block text-[15px]">{aboutReading.author}</span>
+          <span className="mt-1 block text-sm">{aboutReading.author}</span>
         </p>
       </div>
 
@@ -355,32 +351,11 @@ function AdventuresPanel() {
 
       <div className="mt-5">
         {aboutAdventuresText.map((paragraph, index) => (
-          <p
-            key={index}
-            className="mt-3 text-[16px] leading-[1.6] first:mt-0 md:text-[17px]"
-          >
+          <p key={index} className="mt-3 text-base leading-relaxed first:mt-0">
             <HighlightedText segments={paragraph} />
           </p>
         ))}
       </div>
-
-      <ul aria-label="Quest log" className="mt-6 flex flex-wrap gap-2.5">
-        {aboutQuests.map((quest) => (
-          <li
-            key={quest.title}
-            className="flex items-center gap-2 rounded-[6px] border-[2.5px] border-ink bg-paper py-1 pr-1 pl-1 shadow-brutal-sm"
-          >
-            <span
-              className={`rounded-[3px] border-2 border-ink px-2 py-1 font-display text-[15px] leading-none font-black uppercase ${quest.className}`}
-            >
-              {quest.title}
-            </span>
-            <span className="pr-1.5 font-mono text-[11px] leading-none font-bold uppercase">
-              {quest.status}
-            </span>
-          </li>
-        ))}
-      </ul>
 
       <PanelAction link={aboutPanelLinks.adventures} className="bg-green" />
     </>
@@ -401,17 +376,17 @@ function PanelAction({
   return (
     <div className="mt-auto pt-7">
       {link.href ? (
-        <ActionLink href={link.href} className={`text-ink ${className}`}>
+        <ActionLink href={link.href} className={className}>
           {link.label}
           <ArrowUpRightIcon className="size-4" />
         </ActionLink>
       ) : (
         <span
           aria-disabled="true"
-          className="inline-flex cursor-not-allowed items-center gap-2.5 rounded-brutal border-[2.5px] border-dashed border-ink/60 bg-paper/60 px-5 py-3 text-[16px] leading-none font-bold whitespace-nowrap text-ink/60"
+          className="inline-flex cursor-not-allowed items-center gap-2.5 rounded-lg border-3 border-dashed border-ink/60 bg-paper/60 px-5 py-3 text-base leading-none font-bold whitespace-nowrap text-ink/60"
         >
           {link.label}
-          <span className="rounded-full border-2 border-ink/60 px-2 py-0.5 font-mono text-[11px] uppercase">
+          <span className="rounded-full border-2 border-ink/60 px-2 py-0.5 font-mono text-xs uppercase">
             Soon
           </span>
         </span>

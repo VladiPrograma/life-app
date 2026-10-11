@@ -11,10 +11,10 @@ const icons = {
   WhatsApp: WhatsAppIcon,
 } satisfies Record<SocialNetwork, unknown>;
 
-// Ink shadows disappear on the dark contact banner, so it uses pink ones.
+// Ink shadows disappear on the dark contact banner, so it uses blue ones.
 const toneClassNames = {
   light: 'shadow-brutal hover:shadow-brutal-sm focus-visible:outline-ink',
-  dark: 'shadow-[4px_4px_0_var(--color-pink)] hover:shadow-[2px_2px_0_var(--color-pink)] focus-visible:outline-yellow',
+  dark: 'shadow-brutal shadow-blue hover:shadow-brutal-sm focus-visible:outline-yellow',
 };
 
 /** Bordered icon buttons for every social profile that has a URL. */
@@ -37,7 +37,7 @@ export function SocialLinks({
               target="_blank"
               rel="noreferrer"
               aria-label={label}
-              className={`grid size-12 place-items-center rounded-brutal border-[2.5px] border-ink bg-paper text-ink transition-[translate,box-shadow] duration-150 hover:translate-x-[2px] hover:translate-y-[2px] focus-visible:outline-[3px] focus-visible:outline-offset-[3px] ${toneClassNames[tone]}`}
+              className={`grid size-12 place-items-center rounded-lg border-3 border-ink bg-paper text-ink transition-[translate,box-shadow] duration-150 hover:translate-x-[2px] hover:translate-y-[2px] focus-visible:outline-3 focus-visible:outline-offset-3 ${toneClassNames[tone]}`}
             >
               <Icon className="size-6" />
             </a>

@@ -2,18 +2,12 @@ import { useState } from 'react';
 import { AboutPlayerCard } from '@/features/home/components/about-player-card';
 import { AboutShowcase } from '@/features/home/components/about-showcase';
 import { CodeMarkIcon, GearIcon } from '@/features/home/components/icons';
+import { SunburstRays } from '@/features/home/components/sunburst-rays';
 import {
   defaultAboutTab,
   techLoadout,
   type AboutTabId,
 } from '@/features/home/home-content';
-
-// Same burst as the project preview, with
-// angles spread unevenly so it does not read as a mechanical pattern.
-const rayAngles = [
-  -86, -72, -61, -49, -35, -23, -10, 4, 16, 29, 43, 55, 68, 81, 95, 108, 121,
-  134, 147, 160, 173, 187, 201, 215, 227, 240, 254,
-];
 
 // Layout follows the supplied design on the hero's blue. On desktop
 // the backdrop mirrors the projects section, as the user asked: rays behind
@@ -27,55 +21,40 @@ export function AboutSection() {
     <section
       id="about"
       aria-labelledby="about-title"
-      className="relative scroll-mt-4 overflow-clip border-b-[3px] border-ink bg-blue text-ink"
+      className="relative scroll-mt-4 overflow-clip border-b-3 border-ink bg-blue text-ink"
     >
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_right,var(--color-line)_2px,transparent_2px),linear-gradient(to_bottom,var(--color-line)_2px,transparent_2px)] bg-size-[48px_48px] lg:left-1/2"
+        className="pointer-events-none absolute inset-0 bg-grid lg:left-1/2"
       />
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-y-0 right-1/2 left-0 hidden overflow-hidden border-r-2 border-line lg:block"
       >
-        <svg
-          viewBox="-1000 -1000 2000 2000"
-          className="absolute top-1/2 left-1/2 size-[2000px] -translate-1/2"
-        >
-          {rayAngles.map((angle) => (
-            <line
-              key={angle}
-              x1="0"
-              y1="0"
-              x2={Math.cos((angle * Math.PI) / 180) * 1000}
-              y2={Math.sin((angle * Math.PI) / 180) * 1000}
-              stroke="var(--color-line)"
-              strokeWidth="2"
-            />
-          ))}
-        </svg>
+        <SunburstRays />
       </div>
 
-      <div className="relative mx-auto max-w-[1360px] px-4 py-12 md:px-10 md:py-16 lg:py-10">
-        <div className="flex items-center gap-4 rounded-[6px] border-[3px] border-ink bg-yellow px-4 py-3 shadow-[6px_6px_0_var(--color-ink)] md:gap-6 md:px-6">
+      <div className="relative mx-auto max-w-page px-4 py-16 md:px-10 lg:py-24">
+        <div className="flex items-center gap-4 rounded-md border-3 border-ink bg-yellow px-4 py-3 shadow-brutal-lg md:gap-6 md:px-6">
           <CodeMarkIcon className="size-8 shrink-0 md:size-10" />
           <h2
             id="about-title"
-            className="font-display text-[clamp(26px,3.4vw,46px)] leading-none font-black tracking-[-0.01em] whitespace-nowrap uppercase"
+            className="font-display text-h3 leading-none font-black whitespace-nowrap uppercase"
           >
             About me
           </h2>
-          <p className="hidden border-l-[3px] border-ink pl-6 font-mono text-[clamp(14px,1.5vw,20px)] leading-none font-bold tracking-[0.3em] uppercase md:block">
+          <p className="hidden border-l-3 border-ink pl-6 font-mono text-lg leading-none font-bold tracking-[0.3em] uppercase md:block">
             Meet the player
           </p>
           {/* Decorative window controls; the section cannot be closed. */}
           <div aria-hidden="true" className="ml-auto flex gap-2">
-            <span className="flex size-8 items-center justify-center rounded-[4px] border-[3px] border-ink bg-paper md:size-10">
+            <span className="flex size-8 items-center justify-center rounded-sm border-3 border-ink bg-paper md:size-10">
               <span className="h-[3px] w-1/2 bg-ink" />
             </span>
-            <span className="flex size-8 items-center justify-center rounded-[4px] border-[3px] border-ink bg-paper md:size-10">
-              <span className="size-1/2 border-[3px] border-ink" />
+            <span className="flex size-8 items-center justify-center rounded-sm border-3 border-ink bg-paper md:size-10">
+              <span className="size-1/2 border-3 border-ink" />
             </span>
-            <span className="flex size-8 items-center justify-center rounded-[4px] border-[3px] border-ink bg-pink font-mono text-[18px] leading-none font-black md:size-10 md:text-[22px]">
+            <span className="flex size-8 items-center justify-center rounded-sm border-3 border-ink bg-pink font-mono text-lg leading-none font-black md:size-10 md:text-xl">
               ✕
             </span>
           </div>
@@ -87,8 +66,8 @@ export function AboutSection() {
           <AboutShowcase tab={activeTab} />
         </div>
 
-        <div className="mt-10 flex flex-col gap-5 rounded-[6px] lg:mt-6 border-[3px] border-ink bg-cream px-4 py-4 shadow-[6px_6px_0_var(--color-ink)] lg:flex-row lg:items-center lg:gap-6 lg:py-3">
-          <h3 className="flex shrink-0 -rotate-2 items-center gap-3 self-start border-[3px] border-ink bg-pink px-4 py-2 font-display text-[clamp(22px,2.2vw,30px)] leading-none font-black tracking-[-0.02em] uppercase shadow-[4px_4px_0_var(--color-ink)] lg:self-center">
+        <div className="mt-10 flex flex-col gap-5 rounded-md border-3 border-ink bg-cream p-4 shadow-brutal-lg lg:mt-6 lg:flex-row lg:items-center lg:gap-6 lg:py-3">
+          <h3 className="flex shrink-0 -rotate-2 items-center gap-3 self-start border-3 border-ink bg-pink px-4 py-2 font-display text-lead leading-none font-black uppercase shadow-brutal lg:self-center">
             <GearIcon className="size-[1.1em]" />
             Tech loadout
           </h3>
@@ -98,7 +77,7 @@ export function AboutSection() {
                 key={group.category}
                 className="lg:border-l-2 lg:border-ink/40 lg:px-3.5"
               >
-                <p className="font-mono text-[13px] leading-none font-bold uppercase underline underline-offset-4">
+                <p className="font-mono text-xs leading-none font-bold uppercase underline underline-offset-4">
                   {group.category}
                 </p>
                 <ul
@@ -113,6 +92,7 @@ export function AboutSection() {
                         title={item.name}
                         width={36}
                         height={36}
+                        loading="lazy"
                         className="size-9 object-contain"
                       />
                     </li>

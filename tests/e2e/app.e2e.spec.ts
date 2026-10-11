@@ -5,7 +5,7 @@ test('loads the conversation scene without errors or horizontal overflow', async
 }) => {
   await page.goto('/chat');
 
-  await expect(page).toHaveTitle('Life App');
+  await expect(page).toHaveTitle('Vlad Dinca · Senior Software Engineer');
   await expect(page.getByRole('main')).toBeVisible();
   await expect(page.getByRole('img', { name: 'Guide' })).toBeVisible();
   await expect(

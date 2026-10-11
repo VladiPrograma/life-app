@@ -10,9 +10,9 @@ export function HeroShowcase() {
         alt="Portrait of Vlad"
         width={1200}
         height={1080}
-        loading="eager"
+        fetchPriority="high"
         decoding="async"
-        className="aspect-[10/9] w-full object-contain md:translate-x-[12%] md:translate-y-[6%] drop-shadow-[10px_10px_0_var(--color-ink)]"
+        className="aspect-[10/9] w-full object-contain drop-shadow-[10px_10px_0_var(--color-ink)] md:translate-x-[12%] md:translate-y-[6%]"
       />
 
       <HeroTerminal />
