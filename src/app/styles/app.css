@@ -19,12 +19,26 @@
   font-display: swap;
 }
 
+/* Blueprint grid behind the hero and about sections. */
+@utility bg-grid {
+  background-image:
+    linear-gradient(to right, var(--color-line) 2px, transparent 2px),
+    linear-gradient(to bottom, var(--color-line) 2px, transparent 2px);
+  background-size: 48px 48px;
+}
+
 @layer base {
   :root {
     color-scheme: light;
-    font-family: var(--font-body);
     background: var(--color-background);
     color: var(--color-copy);
+  }
+
+  /* Native smooth scrolling for in-page links; no scroll library needed. */
+  @media (prefers-reduced-motion: no-preference) {
+    :root {
+      scroll-behavior: smooth;
+    }
   }
 
   body {

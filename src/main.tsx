@@ -1,7 +1,8 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import { BrowserRouter } from 'react-router';
 import { App } from '@/app/app';
-import '@/lib/env';
+import { env } from '@/lib/env';
 import '@/app/styles/app.css';
 
 const rootElement = document.getElementById('root');
@@ -12,6 +13,8 @@ if (!rootElement) {
 
 createRoot(rootElement).render(
   <StrictMode>
-    <App />
+    <BrowserRouter basename={env.BASE_URL}>
+      <App />
+    </BrowserRouter>
   </StrictMode>,
 );

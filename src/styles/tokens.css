@@ -14,30 +14,89 @@
 
   --font-body: 'Red Hat Text', sans-serif;
   --font-display: 'Red Hat Display', sans-serif;
+  --font-mono: 'Cascadia Mono', Consolas, ui-monospace, monospace;
 
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+
+  /* Conversation scene palette. */
   --color-primary: #655a7c;
-  --color-primary-content: #e9e7ee;
-  --color-primary-dark: #4d455e;
-  --color-primary-light: #7e7198;
-
-  --color-secondary: #667c5a;
-  --color-secondary-content: #eaeee7;
-  --color-secondary-dark: #4e5e45;
-  --color-secondary-light: #7f9871;
-
   --color-background: #efeff1;
+  /* Warm off-white requested for the conversation scene. */
+  --color-scene: #f7f7f5;
   --color-foreground: #fbfbfb;
   --color-border: #dedde2;
-
   --color-copy: #252329;
-  --color-copy-light: #635e6e;
   --color-copy-lighter: #898495;
-
-  --color-success: #5a7c5a;
-  --color-warning: #7c7c5a;
   --color-error: #7c5a5a;
 
-  --color-success-content: #e7eee7;
-  --color-warning-content: #eeeee7;
-  --color-error-content: #eee7e7;
+  /* Neobrutalist home page palette. */
+  --color-ink: #111111;
+  --color-paper: #ffffff;
+  --color-night: #0e1120;
+  --color-blue: #1f5cff;
+  --color-sky: #5b9cff;
+  --color-yellow: #ffe23a;
+  --color-pink: #ff8fd6;
+  --color-green: #7ee35f;
+  --color-cream: #fbf6e3;
+  /* Grid and divider lines on blue and dark sections. */
+  --color-line: rgb(255 255 255 / 0.12);
+
+  /* Home type scale. Every size on the page comes from this list so
+     matching roles (labels, copy, headings) always share a size. */
+  --text-xs: 12px;
+  --text-sm: 14px;
+  --text-base: 16px;
+  --text-lg: 18px;
+  --text-xl: 20px;
+  --text-lead: clamp(20px, 2vw, 28px);
+  --text-h3: clamp(26px, 2.6vw, 40px);
+  --text-h2: clamp(40px, 5vw, 72px);
+  --text-display: clamp(52px, 6.2vw, 104px);
+
+  --leading-tight: 1.05;
+  --leading-relaxed: 1.6;
+
+  /* Matches the approved heading tracking, for display text that is not a
+     heading element. */
+  --tracking-tight: -0.025em;
+  --tracking-wide: 0.12em;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 10px;
+
+  /* Hard offset shadows. Hover states step one size down while the element
+     moves by the difference. */
+  --shadow-brutal-sm: 2px 2px 0 var(--color-ink);
+  --shadow-brutal: 4px 4px 0 var(--color-ink);
+  --shadow-brutal-lg: 6px 6px 0 var(--color-ink);
+  --shadow-brutal-xl: 8px 8px 0 var(--color-ink);
+
+  --container-page: 1360px;
+
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Terminal cursor in the hero. */
+  --animate-blink: blink 1s steps(2, jump-none) infinite;
+
+  @keyframes blink {
+    to {
+      opacity: 0;
+    }
+  }
+
+  /* Assumption: only a desktop reference exists; these switch stacked
+     mobile sections to the multi-column reference layout. */
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
 }
