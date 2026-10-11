@@ -42,4 +42,63 @@
   --color-success-content: #e7eee7;
   --color-warning-content: #eeeee7;
   --color-error-content: #eee7e7;
+
+  /* Neobrutalism home page. Values are estimated
+     from the downscaled reference; revise here when exact specs exist. */
+  --font-mono: 'Cascadia Mono', Consolas, ui-monospace, monospace;
+
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-black: 900;
+
+  --color-ink: #111111;
+  --color-paper: #ffffff;
+  --color-night: #0e1120;
+  --color-blue: #1f5cff;
+  --color-sky: #5b9cff;
+  --color-sky-light: #dbe8ff;
+  --color-yellow: #ffe23a;
+  --color-pink: #ff8fd6;
+  --color-green: #7ee35f;
+  --color-terminal-green: #5cf07a;
+
+  /* Grid and divider lines on blue sections. */
+  --color-line: rgb(255 255 255 / 0.12);
+
+  /* Projects section, sampled from the
+     reference pixels. */
+  --color-gold: #ebd22f;
+  --color-chalk: #eeeeec;
+
+  /* About me panels, estimated from the
+     reference. */
+  --color-cream: #fbf6e3;
+
+  --shadow-brutal: 4px 4px 0 var(--color-ink);
+  --shadow-brutal-sm: 2px 2px 0 var(--color-ink);
+
+  --radius-brutal: 10px;
+
+  --animate-marquee: marquee 40s linear infinite;
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-50%);
+    }
+  }
+
+  /* Terminal cursor in the hero. */
+  --animate-blink: blink 1s steps(2, jump-none) infinite;
+
+  @keyframes blink {
+    to {
+      opacity: 0;
+    }
+  }
+
+  /* Assumption: only a desktop reference exists; these switch stacked
+     mobile sections to the multi-column reference layout. */
+  --breakpoint-md: 48rem;
+  --breakpoint-lg: 64rem;
 }

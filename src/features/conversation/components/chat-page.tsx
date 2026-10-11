@@ -9,9 +9,11 @@ function logConversationResult(result: ConversationResult) {
 
 export function ChatPage() {
   return (
-    <ConversationScene
-      steps={demoConversation}
-      onComplete={logConversationResult}
-    />
+    <main>
+      <ConversationScene
+        steps={demoConversation}
+        onComplete={logConversationResult}
+      />
+    </main>
   );
 }

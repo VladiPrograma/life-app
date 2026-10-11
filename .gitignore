@@ -1,3 +1,6 @@
+# Local resources shared with agents (never committed)
+docs/
+
 # Dependencies and local package caches
 node_modules/
 .npm/

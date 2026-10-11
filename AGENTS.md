@@ -45,7 +45,7 @@ The skill is the detailed project workflow; the rules below are its always-visib
 ## Validation and completion
 
 1. Format: `npm run format`.
-2. For code changes, always run `npm run typecheck`, `npm run lint`, and `npm run test`. Add meaningful behavioral tests for critical logic and regression risks. For documentation/instruction-only changes, verify formatting, links, metadata, and consistency with the repository.
+2. For code changes, always run `npm run typecheck`, `npm run lint`, and `npm run test`. Add new tests only when the user explicitly asks; then make them meaningful and behavior-focused. For documentation/instruction-only changes, verify formatting, links, metadata, and consistency with the repository.
 3. For code changes, run `npm run build`. For UI changes also run `npm run test:e2e` and `npm run test:visual` (or the full `npm run check`). First install browsers with `npx playwright install chromium`.
 4. For UI changes, run the affected page in a real browser. Inspect console, runtime errors, requests, interactions, focus behavior, and actual output at mobile, tablet, laptop, and wide widths. The Playwright fixture captures unexpected diagnostics automatically.
 5. Compare rendered screenshots with the supplied reference at matching viewports; fix discrepancies and repeat. Passing a build or an existing screenshot is not proof of design fidelity.

@@ -67,11 +67,51 @@ test('answers the questions with the keyboard', async ({ page }) => {
   await expect(page.getByRole('textbox')).toHaveCount(0);
 });
 
-test('temporarily redirects the home route to chat', async ({ page }) => {
+test('loads the home page without horizontal overflow', async ({ page }) => {
   await page.goto('/');
 
-  await expect(page).toHaveURL(/\/chat$/);
-  await expect(page.getByRole('img', { name: 'Guide' })).toBeVisible();
+  await expect(
+    page.getByRole('heading', {
+      level: 1,
+      name: 'Senior Software Engineer',
+    }),
+  ).toBeVisible();
+
+  const hasHorizontalOverflow = await page.evaluate(
+    () =>
+      document.documentElement.scrollWidth >
+      document.documentElement.clientWidth,
+  );
+  expect(hasHorizontalOverflow).toBe(false);
+});
+
+test('navigates to home sections from the header', async ({ page }) => {
+  await page.goto('/');
+
+  await page
+    .getByRole('navigation', { name: 'Main' })
+    .getByRole('link', { name: 'Projects' })
+    .click();
+
+  await expect(page).toHaveURL(/#projects$/);
+  await expect(
+    page.getByRole('heading', { level: 2, name: 'Damn! I built this?' }),
+  ).toBeInViewport();
+});
+
+test('hides the header while scrolling down and shows it scrolling up', async ({
+  page,
+}) => {
+  await page.goto('/');
+  const header = page.getByRole('banner');
+
+  await page.mouse.wheel(0, 1200);
+  await expect(header).toHaveAttribute('data-visible', 'false');
+  await expect(header).not.toBeInViewport();
+
+  await page.mouse.wheel(0, -300);
+  await expect(header).toHaveAttribute('data-visible', 'true');
+  await expect(header).toBeInViewport();
 });
 
 test('loads chat directly after a browser refresh', async ({ page }) => {
