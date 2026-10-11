@@ -1,6 +1,6 @@
 # Life App frontend foundation
 
-A minimal React application prepared for implementation from supplied designs. It deliberately contains no product features, navigation, API calls, forms, or invented component library. The single “Application ready” heading proves mounting and browser rendering.
+A React application built from supplied designs. Its first feature, `src/features/conversation/`, is a sequential, videogame-style dialogue scene driven by a data-only flow (`demo-conversation.ts`) at `/chat`. It uses CSS Modules at the brief's request and React Router for navigation; there is no remote data or component library yet. The root route `/` renders the neobrutalist home page from `src/features/home/`. Unknown routes show a minimal page-not-found message.
 
 ## Mandatory project skill
 
@@ -20,7 +20,7 @@ npx playwright install chromium
 npm run dev
 ```
 
-Open the local URL printed by Vite. No `.env` file is required. For Linux browser system dependencies, use `npx playwright install --with-deps chromium`.
+Open `/` (home) or `/chat` at the local URL printed by Vite. No `.env` file is required. For Linux browser system dependencies, use `npx playwright install --with-deps chromium`.
 
 ## Architecture
 
@@ -29,7 +29,7 @@ src/
   app/
     app.tsx              Application composition and minimal shell
     providers/           Reserved for providers with actual consumers
-    router/              Reserved for routing when routes exist
+    router/              Route definitions (home at /, conversation at /chat)
     styles/app.css       Tailwind entry and global browser defaults
   features/              Future domain modules, created only as needed
   components/
@@ -53,7 +53,7 @@ Feature folders may contain `api/`, `components/`, `hooks/`, `schemas/`, `types/
 
 Application composition depends on features; features may depend on shared components and libraries. Shared code must not depend on features or application composition. ESLint prevents those reverse alias imports, deep relative imports, and decentralized environment access. Cross-feature orchestration belongs in `app/`; the dependency policy also applies to imports not statically covered by lint.
 
-The runtime dependencies are React, React DOM, and Zod. Routing, TanStack Query, and React Hook Form are deferred until real routing, remote state, or non-trivial forms justify them. No extra providers or speculative UI primitives are needed for the shell. TypeScript 6.0.3 is pinned for compatibility with typed ESLint; jsdom 28 supports the validated Node version.
+The runtime dependencies are React, React DOM, React Router, and Zod. React Router uses declarative routes with a browser router at startup. Version 7.18.4 supports the project's pinned Node version. TanStack Query and React Hook Form are deferred until remote state or non-trivial forms justify them. No extra providers or speculative UI primitives are needed for the shell. TypeScript 6.0.3 is pinned for compatibility with typed ESLint; jsdom 28 supports the validated Node version.
 
 ## Commands
 
@@ -78,9 +78,9 @@ After changes, run `npm run format` and `npm run check`. Browser suites each own
 
 ## Testing and browser inspection
 
-Vitest uses jsdom, explicit test imports, DOM matchers, and automatic cleanup. The shell test proves accessible rendering; environment tests verify schema rejection. Add behavior-focused tests near the affected module rather than testing implementation details or chasing coverage.
+Vitest uses jsdom, explicit test imports, DOM matchers, and automatic cleanup. Component tests walk the conversation flow; environment tests verify schema rejection. New tests are added only on explicit request; when added, keep them behavior-focused and near the affected module rather than testing implementation details or chasing coverage.
 
-Playwright tests Chromium at **390×844**, **768×1024**, **1366×768**, and **1920×1080**. These are validation viewports, not approved responsive design breakpoints. Both suites fail on unexpected console warnings/errors, uncaught runtime errors, failed requests, and HTTP errors. The smoke test checks the main landmark, heading, title, and horizontal overflow. Failure screenshots and traces are written under `test-results/`, with an HTML report under `playwright-report/`.
+Playwright tests Chromium at **390×844**, **768×1024**, **1366×768**, and **1920×1080**. These are validation viewports, not approved responsive design breakpoints. Both suites fail on unexpected console warnings/errors, uncaught runtime errors, failed requests, and HTTP errors. The e2e suite checks the scene, horizontal overflow, and a keyboard-only walk through the conversation. Failure screenshots and traces are written under `test-results/`, with an HTML report under `playwright-report/`.
 
 For interactive inspection, run `npm run test:e2e -- --headed --project=e2e-laptop`, or open the Vite dev URL. Test keyboard behavior and every relevant state as features are added. The initial scope has no interactions or asynchronous data states. Browser coverage currently means Chromium; add Firefox/WebKit when product browser support is defined.
 
@@ -88,7 +88,7 @@ On Windows PowerShell, use `npm.cmd` instead of `npm` when forwarding extra argu
 
 ## Visual regression and design handoff
 
-The checked-in shell screenshots prove the regression pipeline only; they are **not an approved product design**. The tests pin locale, timezone, color scheme, reduced motion, scale, viewport, and clock, wait for fonts, and disable screenshot animations. Future tests must also fixture remote data, localize assets, control randomness, and wait for explicit stable UI states. Do not use arbitrary sleeps.
+The checked-in screenshots cover the conversation opening line and a question with a typed answer. The tests pin locale, timezone, color scheme, reduced motion, scale, viewport, and clock, wait for fonts, and disable screenshot animations. Future tests must also fixture remote data, localize assets, control randomness, and wait for explicit stable UI states. Do not use arbitrary sleeps.
 
 1. Inspect the entire supplied reference, responsive variants, exact fonts/assets, and states.
 2. Implement the UI and run it at the reference dimensions plus representative responsive widths.
@@ -105,6 +105,8 @@ Tailwind 4 is integrated through its [official Vite plugin](https://tailwindcss.
 
 The supplied typography uses local Red Hat Text for body copy at `18px`, line-height `1.65`, and letter-spacing `-0.01em`. Headings `h1` through `h3` use Red Hat Display with letter-spacing `-0.025em`. The `font-body` and `font-display` utilities expose these families. Normal variable fonts and their SIL Open Font Licenses live in `src/assets/fonts/`, sourced from [Google Fonts Red Hat Text](https://github.com/google/fonts/tree/main/ofl/redhattext) and [Red Hat Display](https://github.com/google/fonts/tree/main/ofl/redhatdisplay); rendering does not request remote fonts.
 
+Icons are local SVG files. `src/assets/icons/emoji/` holds [Fluent Emoji](https://github.com/microsoft/fluentui-emoji) flat illustrations (© Microsoft, MIT), taken from [`@iconify-json/fluent-emoji-flat`](https://www.npmjs.com/package/@iconify-json/fluent-emoji-flat) 1.2.6. In `src/assets/icons/brands/`, LinkedIn and Instagram come from [skill-icons](https://github.com/tandpfun/skill-icons) (MIT, via `@iconify-json/skill-icons` 1.2.4) and WhatsApp from the Iconify [logos](https://github.com/gilbarbara/logos) set (CC0, `@iconify-json/logos` 1.2.15). The Tech Loadout logos in `src/assets/icons/` are the supplied originals. Vite serves SVG icons as separate cached files rather than inlining them into the bundle.
+
 The supplied color palette is defined in `src/styles/tokens.css` through Tailwind 4's CSS theme. It includes primary and secondary colors with content, dark, and light variants; background, foreground, and border; three copy levels; and success, warning, and error colors with matching content colors. Use `bg-background` for the page, `bg-foreground` for surfaces, `text-copy` for default text, and `border-border` for borders. Semantic pairs such as `bg-primary text-primary-content` are available without a JavaScript Tailwind configuration.
 
 Unevidenced Tailwind palette, typography, radius, shadow, breakpoint, and container scales are cleared. Tailwind's spacing utility mechanism remains available; its scale is a tool, not a design requirement. Add real tokens from supplied specifications and retain exact one-off values when required. Do not infer a layout from this shell, choose a replacement font, or invent responsive transformations. Keep geometry close to JSX and extract components only when patterns repeat.
@@ -113,6 +115,31 @@ Unevidenced Tailwind palette, typography, radius, shadow, breakpoint, and contai
 
 `.env.example` documents the empty configuration contract. `src/lib/env.ts` validates Vite's `BASE_URL` and `MODE` at startup and is the only application module allowed to read `import.meta.env`. Add custom variables to that schema and `.env.example` when needed, with useful validation messages. Required settings should fail early rather than cause later undefined behavior. All `VITE_*` values are public build-time data; credentials belong on a server, never in this repository or the client bundle.
 
-`npm run build` produces static assets in `dist/`. `npm run preview` is a local inspection server, not a production host. Select deployment configuration, SPA fallback rules, API behavior, and required environment settings when hosting and actual routes are known. No deployment is configured or performed by this foundation.
+`npm run build` produces static assets in `dist/`. `npm run preview` is a local inspection server, not a production host. The production Docker image serves these assets through Nginx, with an `index.html` fallback for application routes such as `/chat` so direct visits and refreshes work.
+
+### Deploy with Dokploy
+
+The root `Dockerfile` builds with Node **22.17.1** and npm **11.6.2**, installs the locked dependencies with `npm ci --include=dev`, and runs `npm run build`. Development dependencies and test source files are required during compilation because the build typechecks application, test, and tooling code. The final `nginx:stable-alpine` image contains only the compiled site and the Nginx configuration. Keep the build versions aligned with `.nvmrc` and `package.json`; the Nginx stable tag receives updates when pulled again.
+
+The frontend listens on **port 80 inside its container**. It does not bind a host port or use **8080**, which remains available for the backend. Dokploy's Traefik routes public HTTP/HTTPS traffic to the frontend container. No database, persistent volume, custom start command, or environment variables are required for the current frontend.
+
+1. Push the application code, local assets, `Dockerfile`, `.dockerignore`, and `nginx.conf` to the Git repository used by Dokploy.
+2. Create an **Application**, select the repository and deployment branch, and choose **Dockerfile** as the build type.
+3. Set **Dockerfile Path** to `Dockerfile`, **Docker Context Path** to `.`, and leave **Docker Build Stage** empty to use the final production stage. These paths assume this application is the repository root; adjust both paths if it is a subdirectory.
+4. In **Domains**, add the frontend domain or subdomain with path `/` and **Container Port** `80`. Point its DNS record to the Dokploy server and enable HTTPS with the appropriate certificate. Leave **Advanced > Ports** empty; no host port mapping is needed.
+5. Deploy and verify `/`, a direct visit and refresh of `/chat`, and the browser's asset requests. The image health check requests `/index.html` on its internal port 80.
+
+`nginx.conf` makes the HTML revalidate, caches Vite's hashed `/assets/` files for one year, and returns 404 for missing compiled assets. Public files outside `/assets/` also revalidate. Reserve `/assets/` for Vite output; do not put unhashed files in `public/assets/`. Hosting under a URL subpath requires coordinated Vite and routing configuration; this setup assumes the domain root.
+
+The backend remains a separate service. This deployment does not configure an API proxy or connect the current frontend to it. Future `VITE_*` configuration must be validated in `src/lib/env.ts` and provided during the Docker build before `npm run build`; changing only the running container's environment will not update compiled browser assets. Never include secrets in these public settings.
+
+To build and check the same container locally, use port **8081**:
+
+```sh
+docker build --pull -t life-app:local .
+docker run --rm -p 127.0.0.1:8081:80 life-app:local
+```
+
+Open `http://localhost:8081` and `http://localhost:8081/chat`. Run the existing quality checks before deployment; the Docker build runs typechecking and compilation, not lint, unit, or browser tests. See Dokploy's [build type](https://docs.dokploy.com/docs/core/applications/build-type) and [domain](https://docs.dokploy.com/docs/core/domains) documentation for the corresponding settings, and the [Nginx routing reference](https://nginx.org/en/docs/http/ngx_http_core_module.html#try_files) for the SPA fallback.
 
 The included GitHub Actions workflow uses Windows and runs the complete quality gate, retaining reports on failure. Read [AGENTS.md](AGENTS.md) before contributing; it defines the design-fidelity and validation contract for humans and autonomous agents.

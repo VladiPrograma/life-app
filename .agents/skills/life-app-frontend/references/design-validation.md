@@ -26,7 +26,7 @@ Do not stop after writing code or passing a build. Screenshot stability confirms
 
 ## Deterministic screenshot tests
 
-Add visual tests for important pages or repeated components where regression risk justifies them. Reuse `tests/fixtures.ts` so unexpected browser diagnostics fail the test; do not discard that protection to get a pass. Intentional failure-state tests should explicitly verify their expected diagnostics without hiding unrelated errors.
+Add visual tests only when the user explicitly asks for them. Reuse `tests/fixtures.ts` so unexpected browser diagnostics fail the test; do not discard that protection to get a pass. Intentional failure-state tests should explicitly verify their expected diagnostics without hiding unrelated errors.
 
 Control instability before taking screenshots:
 

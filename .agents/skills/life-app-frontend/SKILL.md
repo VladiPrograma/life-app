@@ -72,7 +72,7 @@ Use exact supplied assets and fonts. Preserve aspect ratio, crop, resolution, fo
 
 ## Validation gates
 
-After code changes, format and run the relevant checks. Never write meaningless tests just to raise coverage; prioritize critical logic, important flows, complex or accessibility-sensitive interactions, and regression risks. Colocate unit/component tests with their implementation.
+After code changes, format and run the relevant checks. Add new tests (unit, component, e2e, or visual) only when the user explicitly asks for them; otherwise run and maintain the existing suites. When tests are requested, never write meaningless tests just to raise coverage; prioritize critical logic, important flows, complex or accessibility-sensitive interactions, and regression risks. Colocate unit/component tests with their implementation.
 
 ```sh
 npm run format
@@ -97,6 +97,6 @@ If a required check is blocked, identify the command, concrete blocker, and unve
 
 ## Definition of done
 
-The requested behavior exists and follows repository conventions. Relevant checks pass. For UI work, rendered behavior has been inspected in a real browser, responsive layouts and relevant states work, diagnostics are clear, and output closely matches the supplied reference. Screenshot tests are added or updated where appropriate through the review workflow in the linked reference.
+The requested behavior exists and follows repository conventions. Relevant checks pass. For UI work, rendered behavior has been inspected in a real browser, responsive layouts and relevant states work, diagnostics are clear, and output closely matches the supplied reference. Existing screenshot baselines are updated after intended visual changes through the review workflow in the linked reference; new screenshot tests are added only when the user asks.
 
 Summarize meaningful changes, decisions, assumptions, checks actually run, and material limitations. Keep README and agent instructions current when commands, ownership, or workflows change. Never describe a generated screenshot, successful compilation, or implementation alone as proof of visual correctness.

@@ -8,6 +8,12 @@ export default defineConfig({
   resolve: {
     alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) },
   },
+  build: {
+    // Icon and logo SVGs ship as separate, cacheable files instead of being
+    // inlined into the JavaScript bundle; other small assets keep the default.
+    assetsInlineLimit: (filePath) =>
+      filePath.endsWith('.svg') ? false : undefined,
+  },
   test: {
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],

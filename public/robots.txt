@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+# The conversation page is an unfinished demo.
+Disallow: /chat
