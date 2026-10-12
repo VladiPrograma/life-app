@@ -88,6 +88,10 @@ test('loads the home page without horizontal overflow', async ({ page }) => {
 test('navigates to home sections from the header', async ({ page }) => {
   await page.goto('/');
 
+  // Narrow layouts keep the navigation behind the menu button.
+  const menuButton = page.getByRole('button', { name: 'Menu' });
+  if (await menuButton.isVisible()) await menuButton.click();
+
   await page
     .getByRole('navigation', { name: 'Main' })
     .getByRole('link', { name: 'Projects' })
