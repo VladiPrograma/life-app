@@ -9,6 +9,7 @@ test('addresses the message and signs it with the sender details', () => {
       message: 'We need to split a monolith into services.',
     },
     'me@example.com',
+    'en',
   );
   const url = new URL(href);
 

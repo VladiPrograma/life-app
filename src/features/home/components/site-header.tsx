@@ -1,14 +1,36 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { ActionLink } from '@/features/home/components/action-link';
-import cvUrl from '@/assets/documents/vlad-dumitru-dinca-cv-en.pdf';
+import cvEnUrl from '@/assets/documents/vlad-dumitru-dinca-cv-en.pdf';
+import cvEsUrl from '@/assets/documents/vlad-dumitru-dinca-cv-es.pdf';
 import logoUrl from '@/assets/logo.webp';
 import { ArrowRightIcon, DownloadIcon } from '@/features/home/components/icons';
+import { LanguageSwitch } from '@/features/home/components/language-switch';
 import { navigationItems, profile } from '@/features/home/home-content';
 import { useShowOnScrollUp } from '@/features/home/hooks/use-show-on-scroll-up';
+import { localized, useLocale } from '@/lib/i18n/locale';
 
 const cvFileName = 'Vlad-Dumitru-Dinca-CV.pdf';
 
+const copy = localized({
+  en: {
+    cvUrl: cvEnUrl,
+    navigation: 'Main',
+    downloadCv: 'Download CV',
+    letsBuild: 'Let’s Build',
+    menu: 'Menu',
+  },
+  es: {
+    cvUrl: cvEsUrl,
+    navigation: 'Principal',
+    downloadCv: 'Descargar CV',
+    letsBuild: 'Hablemos',
+    menu: 'Menú',
+  },
+});
+
 export function SiteHeader() {
+  const locale = useLocale();
+  const text = copy[locale];
   const isVisible = useShowOnScrollUp();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
@@ -78,7 +100,10 @@ export function SiteHeader() {
           </span>
         </a>
 
-        <nav aria-label="Main" className="mr-auto ml-6 hidden lg:block">
+        <nav
+          aria-label={text.navigation}
+          className="mr-auto ml-6 hidden xl:block"
+        >
           <ul className="flex gap-7 py-1 text-base font-bold">
             {navigationItems.map((item, index) => (
               <li key={item.href}>
@@ -87,29 +112,30 @@ export function SiteHeader() {
                   aria-current={index === 0 ? 'page' : undefined}
                   className="border-b-3 border-transparent pb-1 whitespace-nowrap hover:border-ink focus-visible:outline-3 focus-visible:outline-offset-2 focus-visible:outline-ink aria-[current=page]:border-ink"
                 >
-                  {item.label}
+                  {item.label[locale]}
                 </a>
               </li>
             ))}
           </ul>
         </nav>
 
-        <div className="hidden items-center gap-3 lg:flex">
+        <div className="hidden items-center gap-3 xl:flex">
           <ActionLink
-            href={cvUrl}
+            href={text.cvUrl}
             download={cvFileName}
             className="bg-pink py-2.5"
           >
             <DownloadIcon className="size-5" />
-            Download CV
+            {text.downloadCv}
           </ActionLink>
           <ActionLink href="#contact" className="bg-yellow py-2.5">
-            Let’s Build
+            {text.letsBuild}
             <ArrowRightIcon className="size-5" />
           </ActionLink>
+          <LanguageSwitch className="self-stretch" />
         </div>
 
-        {/* Below laptop widths the navigation and calls to action move into
+        {/* Below wide laptop widths the navigation and calls to action move into
             a dropdown behind this corner button. */}
         <button
           ref={toggleRef}
@@ -117,11 +143,11 @@ export function SiteHeader() {
           aria-expanded={isMenuOpen}
           aria-controls={menuId}
           onClick={() => setIsMenuOpen((open) => !open)}
-          className={`relative size-11 shrink-0 rounded-md border-3 border-ink shadow-brutal transition-[translate,box-shadow,background-color] duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-brutal-sm focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-ink lg:hidden ${
+          className={`relative size-11 shrink-0 rounded-md border-3 border-ink shadow-brutal transition-[translate,box-shadow,background-color] duration-150 hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-brutal-sm focus-visible:outline-3 focus-visible:outline-offset-3 focus-visible:outline-ink xl:hidden ${
             isMenuOpen ? 'bg-pink' : 'bg-yellow'
           }`}
         >
-          <span className="sr-only">Menu</span>
+          <span className="sr-only">{text.menu}</span>
           {/* Three bars that fold into a cross while the menu is open. */}
           <span
             aria-hidden="true"
@@ -158,10 +184,10 @@ export function SiteHeader() {
               setIsMenuOpen(false);
             }
           }}
-          className="absolute inset-x-0 top-full max-h-[calc(100dvh-100%)] overflow-y-auto border-b-3 border-ink bg-yellow lg:hidden"
+          className="absolute inset-x-0 top-full max-h-[calc(100dvh-100%)] overflow-y-auto border-b-3 border-ink bg-yellow xl:hidden"
         >
           <div className="mx-auto max-w-page px-4 pt-2 pb-6 md:px-10">
-            <nav aria-label="Main">
+            <nav aria-label={text.navigation}>
               <ul>
                 {navigationItems.map((item, index) => (
                   <li key={item.href} className="border-b-3 border-ink">
@@ -171,7 +197,7 @@ export function SiteHeader() {
                       className="group flex items-center justify-between py-4 font-display text-h3 leading-none font-black uppercase focus-visible:outline-3 focus-visible:-outline-offset-3 focus-visible:outline-ink"
                     >
                       <span className="group-aria-[current=page]:bg-paper group-aria-[current=page]:px-2 group-aria-[current=page]:shadow-brutal-sm">
-                        {item.label}
+                        {item.label[locale]}
                       </span>
                       <ArrowRightIcon className="size-7 transition-transform duration-150 group-hover:translate-x-1" />
                     </a>
@@ -182,18 +208,20 @@ export function SiteHeader() {
 
             <div className="mt-6 flex flex-col gap-3 md:flex-row">
               <ActionLink
-                href={cvUrl}
+                href={text.cvUrl}
                 download={cvFileName}
                 className="justify-center bg-pink"
               >
                 <DownloadIcon className="size-5" />
-                Download CV
+                {text.downloadCv}
               </ActionLink>
               <ActionLink href="#contact" className="justify-center bg-paper">
-                Let’s Build
+                {text.letsBuild}
                 <ArrowRightIcon className="size-5" />
               </ActionLink>
             </div>
+
+            <LanguageSwitch className="mt-6 h-11" />
           </div>
         </div>
       ) : null}

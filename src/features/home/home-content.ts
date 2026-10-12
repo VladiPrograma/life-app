@@ -35,15 +35,34 @@ import elisandesignScreenshot from '@/assets/projects/elisandesign.webp';
 import experienceNowScreenshot from '@/assets/projects/experience-now.webp';
 import securitasDirectScreenshot from '@/assets/projects/securitas-direct.webp';
 import viscoScreenshot from '@/assets/projects/visco.webp';
+import { localized, type Localized } from '@/lib/i18n/locale';
 
-// Content follows Vlad's CV.
+// Content follows Vlad's CV. Copy that changes with the language is written
+// per locale, either as a whole block or as a single `{ en, es }` value. The
+// Spanish wording follows the Spanish CV, which keeps the role and job titles
+// in English.
 export const profile = {
   shortName: 'Vlad Dinca',
   role: 'Senior Software Engineer',
-  location: 'Zaragoza, Spain',
-  available: 'Available soon',
+  location: { en: 'Zaragoza, Spain', es: 'Zaragoza, España' },
+  available: { en: 'Available soon', es: 'Disponible pronto' },
   email: 'mdumitruvlad@gmail.com',
 } as const;
+
+// index.html carries the English values for crawlers that do not run
+// JavaScript; the home page applies these per locale.
+export const pageMetadata = localized({
+  en: {
+    description:
+      'Vlad Dumitru Dinca, Senior Software Engineer in Zaragoza, Spain. Java and Spring Boot backend, microservices, Kafka, AWS and Kubernetes. See my projects and get in touch.',
+    canonicalUrl: 'https://me.vladicode.com/',
+  },
+  es: {
+    description:
+      'Vlad Dumitru Dinca, Senior Software Engineer en Zaragoza, España. Backend con Java y Spring Boot, microservicios, Kafka, AWS y Kubernetes. Mira mis proyectos y ponte en contacto.',
+    canonicalUrl: 'https://me.vladicode.com/es',
+  },
+});
 
 export const emailHref = `mailto:${profile.email}`;
 
@@ -78,32 +97,57 @@ export const heroTicker = [
 ] as const;
 
 // Strips between the later sections, each echoing the section around it.
-export const valuesTicker = [
-  'Clean code',
-  'SOLID',
-  'Tests that matter',
-  'API-first',
-  'Fast under load',
-  'Mentoring',
-  'Event-driven',
-] as const;
+export const valuesTicker = localized<readonly string[]>({
+  en: [
+    'Clean code',
+    'SOLID',
+    'Tests that matter',
+    'API-first',
+    'Fast under load',
+    'Mentoring',
+    'Event-driven',
+  ],
+  es: [
+    'Código limpio',
+    'SOLID',
+    'Tests que importan',
+    'API-first',
+    'Rápido bajo carga',
+    'Mentoría',
+    'Orientado a eventos',
+  ],
+});
 
-export const hobbiesTicker = [
-  'Climbing',
-  'Hiking',
-  'Kawasaki Ninja 500',
-  'Classic literature',
-  'Walden',
-  'Gym',
-  'Plants & coffee',
-] as const;
+export const hobbiesTicker = localized<readonly string[]>({
+  en: [
+    'Climbing',
+    'Hiking',
+    'Kawasaki Ninja 500',
+    'Classic literature',
+    'Walden',
+    'Gym',
+    'Plants & coffee',
+  ],
+  es: [
+    'Escalada',
+    'Senderismo',
+    'Kawasaki Ninja 500',
+    'Literatura clásica',
+    'Walden',
+    'Gimnasio',
+    'Plantas y café',
+  ],
+});
 
-export const navigationItems = [
-  { label: 'Home', href: '#home' },
-  { label: 'Projects', href: '#projects' },
-  { label: 'About', href: '#about' },
-  { label: 'Contact', href: '#contact' },
-] as const;
+export const navigationItems: readonly {
+  label: Localized<string>;
+  href: string;
+}[] = [
+  { label: { en: 'Home', es: 'Inicio' }, href: '#home' },
+  { label: { en: 'Projects', es: 'Proyectos' }, href: '#projects' },
+  { label: { en: 'About', es: 'Sobre mí' }, href: '#about' },
+  { label: { en: 'Contact', es: 'Contacto' }, href: '#contact' },
+];
 
 // About me player card.
 export type HighlightColor = 'yellow' | 'pink' | 'green' | 'sky';
@@ -111,46 +155,89 @@ export type HighlightColor = 'yellow' | 'pink' | 'green' | 'sky';
 /** Plain text, or a phrase underlined with a marker of the given colour. */
 export type BioSegment = string | { text: string; highlight: HighlightColor };
 
+type BioText = readonly (readonly BioSegment[])[];
+
 // Facts from Vlad's CV. The first paragraph is the lead.
-export const aboutBio: readonly (readonly BioSegment[])[] = [
-  [
-    'Hi! I’m Vlad, a ',
-    { text: 'Java backend engineer', highlight: 'yellow' },
-    ' based in ',
-    { text: 'Zaragoza, Spain', highlight: 'sky' },
-    '.',
+export const aboutBio = localized<BioText>({
+  en: [
+    [
+      'Hi! I’m Vlad, a ',
+      { text: 'Java backend engineer', highlight: 'yellow' },
+      ' based in ',
+      { text: 'Zaragoza, Spain', highlight: 'sky' },
+      '.',
+    ],
+    [
+      'Since 2020 I’ve built and modernized high-traffic platforms: a Renfe service used by ',
+      { text: '500,000 daily passengers', highlight: 'green' },
+      ', aerial imagery pipelines for France’s Geoportail and, at Securitas Direct, the migration of a legacy platform to ',
+      { text: 'Java 17 microservices', highlight: 'pink' },
+      '.',
+    ],
+    [
+      'I’m a ',
+      { text: 'deeply creative', highlight: 'yellow' },
+      ' person and I love ',
+      { text: 'side projects', highlight: 'green' },
+      '. Over the years I’ve built websites and platforms for friends, like ',
+      { text: 'Elisandesign', highlight: 'sky' },
+      ', and for foundations, like ',
+      { text: 'Cierzo', highlight: 'sky' },
+      '.',
+    ],
+    [
+      'When the laptop closes, I’m ',
+      { text: 'on the bike, on a wall or in a book', highlight: 'pink' },
+      '.',
+    ],
   ],
-  [
-    'Since 2020 I’ve built and modernized high-traffic platforms: a Renfe service used by ',
-    { text: '500,000 daily passengers', highlight: 'green' },
-    ', aerial imagery pipelines for France’s Geoportail and, at Securitas Direct, the migration of a legacy platform to ',
-    { text: 'Java 17 microservices', highlight: 'pink' },
-    '.',
+  es: [
+    [
+      '¡Hola! Soy Vlad, ',
+      { text: 'ingeniero backend Java', highlight: 'yellow' },
+      ' en ',
+      { text: 'Zaragoza, España', highlight: 'sky' },
+      '.',
+    ],
+    [
+      'Desde 2020 he construido y modernizado plataformas de alto tráfico: un servicio de Renfe que usan ',
+      { text: '500.000 pasajeros al día', highlight: 'green' },
+      ', pipelines de imágenes aéreas para el Geoportail francés y, en Securitas Direct, la migración de una plataforma heredada a ',
+      { text: 'microservicios con Java 17', highlight: 'pink' },
+      '.',
+    ],
+    [
+      'Soy una persona ',
+      { text: 'muy creativa', highlight: 'yellow' },
+      ' y me encantan los ',
+      { text: 'proyectos personales', highlight: 'green' },
+      '. Con los años he creado webs y plataformas para amigos, como ',
+      { text: 'Elisandesign', highlight: 'sky' },
+      ', y para fundaciones, como ',
+      { text: 'Cierzo', highlight: 'sky' },
+      '.',
+    ],
+    [
+      'Cuando cierro el portátil, estoy ',
+      { text: 'en la moto, escalando o con un libro', highlight: 'pink' },
+      '.',
+    ],
   ],
-  [
-    'I’m a ',
-    { text: 'deeply creative', highlight: 'yellow' },
-    ' person and I love ',
-    { text: 'side projects', highlight: 'green' },
-    '. Over the years I’ve built websites and platforms for friends, like ',
-    { text: 'Elisandesign', highlight: 'sky' },
-    ', and for foundations, like ',
-    { text: 'Cierzo', highlight: 'sky' },
-    '.',
-  ],
-  [
-    'When the laptop closes, I’m ',
-    { text: 'on the bike, on a wall or in a book', highlight: 'pink' },
-    '.',
-  ],
-];
+});
 
 // Closes the bio, right above the social profile buttons.
-export const aboutBioInvite: readonly BioSegment[] = [
-  'I ',
-  { text: 'love meeting new people', highlight: 'pink' },
-  ', so now that you’re here, don’t hesitate to say hi:',
-];
+export const aboutBioInvite = localized<readonly BioSegment[]>({
+  en: [
+    'I ',
+    { text: 'love meeting new people', highlight: 'pink' },
+    ', so now that you’re here, don’t hesitate to say hi:',
+  ],
+  es: [
+    'Me ',
+    { text: 'encanta conocer gente nueva', highlight: 'pink' },
+    ', así que ahora que estás aquí, no dudes en saludarme:',
+  ],
+});
 
 type CareerJobId = 'renfe' | 'geoportail' | 'securitas';
 
@@ -233,29 +320,57 @@ export const techExperience: readonly {
 ];
 
 // Written from the user's own description of their free time.
-export const aboutPersonal: readonly (readonly BioSegment[])[] = [
-  [
-    'I have way too many hobbies. Right now it’s ',
-    { text: 'motorbikes', highlight: 'sky' },
-    ', but I’ve tried a bit of everything, and the ',
-    { text: 'gym and climbing', highlight: 'green' },
-    ' never leave the list.',
+export const aboutPersonal = localized<BioText>({
+  en: [
+    [
+      'I have way too many hobbies. Right now it’s ',
+      { text: 'motorbikes', highlight: 'sky' },
+      ', but I’ve tried a bit of everything, and the ',
+      { text: 'gym and climbing', highlight: 'green' },
+      ' never leave the list.',
+    ],
+    [
+      'I’ve spent the last few years turning an old shop into my home: ',
+      { text: 'a loft my friends openly envy', highlight: 'yellow' },
+      ', packed with ',
+      { text: 'plants', highlight: 'green' },
+      '. I simply can’t stop buying them.',
+    ],
+    [
+      'To rest from screens I let my artsy side out. I’d love to learn to draw, but for now I ',
+      { text: 'read', highlight: 'pink' },
+      ', which relaxes me like nothing else: ',
+      { text: 'classic literature and essays', highlight: 'pink' },
+      '. One day they’ll become a project of their own, my library.',
+    ],
   ],
-  [
-    'I’ve spent the last few years turning an old shop into my home: ',
-    { text: 'a loft my friends openly envy', highlight: 'yellow' },
-    ', packed with ',
-    { text: 'plants', highlight: 'green' },
-    '. I simply can’t stop buying them.',
+  es: [
+    [
+      'Tengo demasiados hobbies. Ahora mismo me ha dado por las ',
+      { text: 'motos', highlight: 'sky' },
+      ', pero he probado un poco de todo, y el ',
+      { text: 'gimnasio y la escalada', highlight: 'green' },
+      ' nunca salen de la lista.',
+    ],
+    [
+      'He pasado los últimos años convirtiendo una antigua tienda en mi casa: ',
+      {
+        text: 'un loft que mis amigos envidian sin disimulo',
+        highlight: 'yellow',
+      },
+      ', lleno de ',
+      { text: 'plantas', highlight: 'green' },
+      '. Simplemente no puedo dejar de comprarlas.',
+    ],
+    [
+      'Para descansar de las pantallas saco mi lado artístico. Me encantaría aprender a dibujar, pero de momento ',
+      { text: 'leo', highlight: 'pink' },
+      ', que me relaja como nada: ',
+      { text: 'literatura clásica y ensayo', highlight: 'pink' },
+      '. Algún día serán un proyecto propio, mi biblioteca.',
+    ],
   ],
-  [
-    'To rest from screens I let my artsy side out. I’d love to learn to draw, but for now I ',
-    { text: 'read', highlight: 'pink' },
-    ', which relaxes me like nothing else: ',
-    { text: 'classic literature and essays', highlight: 'pink' },
-    '. One day they’ll become a project of their own, my library.',
-  ],
-];
+});
 
 // Book on the Personal tab.
 export const aboutReading = {
@@ -263,41 +378,78 @@ export const aboutReading = {
   author: 'Jorge Luis Borges',
 } as const;
 
-// Written from the user's own description of their outdoor side.
-export const aboutAdventuresText: readonly (readonly BioSegment[])[] = [
-  [
-    'One of my favourite films is ',
-    { text: 'Into the Wild', highlight: 'green' },
-    '. I read the book afterwards, and it’s full of other books: essays like ',
-    { text: 'Walden', highlight: 'yellow' },
-    ', which became my favourite, and classics like ',
-    { text: 'The Call of the Wild', highlight: 'pink' },
-    ' or ',
-    { text: 'Huckleberry Finn', highlight: 'pink' },
-    '. That’s how I started reading.',
+// Written from the user's own description of their outdoor side. The Spanish
+// text uses the titles published in Spain.
+export const aboutAdventuresText = localized<BioText>({
+  en: [
+    [
+      'One of my favourite films is ',
+      { text: 'Into the Wild', highlight: 'green' },
+      '. I read the book afterwards, and it’s full of other books: essays like ',
+      { text: 'Walden', highlight: 'yellow' },
+      ', which became my favourite, and classics like ',
+      { text: 'The Call of the Wild', highlight: 'pink' },
+      ' or ',
+      { text: 'Huckleberry Finn', highlight: 'pink' },
+      '. That’s how I started reading.',
+    ],
+    [
+      'That chain of discoveries also brought me closer to ',
+      { text: 'nature', highlight: 'green' },
+      ' and woke up my ',
+      { text: 'adventurous spirit', highlight: 'sky' },
+      ': the urge to get out there and explore.',
+    ],
+    [
+      'Don’t get me wrong, I ',
+      { text: 'love software', highlight: 'yellow' },
+      '. But sitting for 8 hours a day, sometimes 12, gets heavy when another 8 go to sleep. That’s why I need ',
+      { text: 'extreme sports', highlight: 'pink' },
+      ' and a dose of strong emotions every now and then, and that’s why the motorbike.',
+    ],
+    [
+      'A friend and I recently bought a ',
+      { text: 'Kawasaki Ninja 250R', highlight: 'sky' },
+      ' together, and we’re getting into the track world: learning to race and to lean the bike into corners at the ',
+      { text: 'Circuito Internacional de Zuera', highlight: 'green' },
+      '. I try to document it all on Instagram.',
+    ],
   ],
-  [
-    'That chain of discoveries also brought me closer to ',
-    { text: 'nature', highlight: 'green' },
-    ' and woke up my ',
-    { text: 'adventurous spirit', highlight: 'sky' },
-    ': the urge to get out there and explore.',
+  es: [
+    [
+      'Una de mis películas favoritas es ',
+      { text: 'Hacia rutas salvajes', highlight: 'green' },
+      '. Después leí el libro, y está lleno de otros libros: ensayos como ',
+      { text: 'Walden', highlight: 'yellow' },
+      ', que se convirtió en mi favorito, y clásicos como ',
+      { text: 'La llamada de lo salvaje', highlight: 'pink' },
+      ' o ',
+      { text: 'Huckleberry Finn', highlight: 'pink' },
+      '. Así empecé a leer.',
+    ],
+    [
+      'Esa cadena de descubrimientos también me acercó a la ',
+      { text: 'naturaleza', highlight: 'green' },
+      ' y despertó mi ',
+      { text: 'espíritu aventurero', highlight: 'sky' },
+      ': las ganas de salir ahí fuera a explorar.',
+    ],
+    [
+      'No me malinterpretes, me ',
+      { text: 'encanta el software', highlight: 'yellow' },
+      '. Pero pasar 8 horas al día sentado, a veces 12, se hace pesado cuando otras 8 se van en dormir. Por eso necesito los ',
+      { text: 'deportes extremos', highlight: 'pink' },
+      ' y una dosis de emociones fuertes de vez en cuando, y por eso la moto.',
+    ],
+    [
+      'Hace poco un amigo y yo nos compramos a medias una ',
+      { text: 'Kawasaki Ninja 250R', highlight: 'sky' },
+      ', y nos estamos metiendo en el mundo del circuito: aprendiendo a rodar y a tumbar la moto en las curvas en el ',
+      { text: 'Circuito Internacional de Zuera', highlight: 'green' },
+      '. Intento documentarlo todo en Instagram.',
+    ],
   ],
-  [
-    'Don’t get me wrong, I ',
-    { text: 'love software', highlight: 'yellow' },
-    '. But sitting for 8 hours a day, sometimes 12, gets heavy when another 8 go to sleep. That’s why I need ',
-    { text: 'extreme sports', highlight: 'pink' },
-    ' and a dose of strong emotions every now and then, and that’s why the motorbike.',
-  ],
-  [
-    'A friend and I recently bought a ',
-    { text: 'Kawasaki Ninja 250R', highlight: 'sky' },
-    ' together, and we’re getting into the track world: learning to race and to lean the bike into corners at the ',
-    { text: 'Circuito Internacional de Zuera', highlight: 'green' },
-    '. I try to document it all on Instagram.',
-  ],
-];
+});
 
 const instagramHref =
   socialLinks.find((link) => link.label === 'Instagram')?.href ?? '';
@@ -306,17 +458,26 @@ const instagramHref =
 // exist yet, and Adventures points to Instagram until the mountain blog does;
 // an empty href renders the button as "coming soon".
 export const aboutPanelLinks = {
-  tech: { label: 'Read my tech blog', href: '' },
-  personal: { label: 'Visit my library', href: '' },
-  adventures: { label: 'Follow on Instagram', href: instagramHref },
-} as const satisfies Record<string, { label: string; href: string }>;
+  tech: {
+    label: { en: 'Read my tech blog', es: 'Lee mi blog técnico' },
+    href: '',
+  },
+  personal: {
+    label: { en: 'Visit my library', es: 'Visita mi biblioteca' },
+    href: '',
+  },
+  adventures: {
+    label: { en: 'Follow on Instagram', es: 'Sígueme en Instagram' },
+    href: instagramHref,
+  },
+} as const satisfies Record<string, { label: Localized<string>; href: string }>;
 
 export const aboutTabs = [
-  { id: 'bio', label: 'Bio' },
-  { id: 'tech', label: 'Tech' },
-  { id: 'personal', label: 'Personal' },
-  { id: 'adventures', label: 'Adventures' },
-] as const;
+  { id: 'bio', label: { en: 'Bio', es: 'Bio' } },
+  { id: 'tech', label: { en: 'Tech', es: 'Tech' } },
+  { id: 'personal', label: { en: 'Personal', es: 'Personal' } },
+  { id: 'adventures', label: { en: 'Adventures', es: 'Aventuras' } },
+] as const satisfies readonly { id: string; label: Localized<string> }[];
 
 export type AboutTabId = (typeof aboutTabs)[number]['id'];
 
@@ -326,81 +487,147 @@ export const defaultAboutTab: AboutTabId = 'tech';
 type AboutScene = {
   image: {
     src: string;
-    alt: string;
+    alt: Localized<string>;
     width: number;
     height: number;
     /** CSS object-position keeping the subject inside the 6:5 arch. */
     position?: string;
   };
   /** `icon` is a Fluent Emoji illustration (Microsoft, MIT). */
-  equipment: readonly { label: string; className: string; icon: string }[];
+  equipment: readonly {
+    label: Localized<string>;
+    className: string;
+    icon: string;
+  }[];
 };
 
-// Artwork and equipment shown beside the player card for each tab.
+// Artwork and equipment shown beside the player card for each tab. Spanish
+// equipment labels stay as short as the English ones so the squares keep
+// their width.
 export const aboutScenes: Record<AboutTabId, AboutScene> = {
   bio: {
     image: {
       src: vladMoto,
-      alt: `${profile.shortName} riding his Kawasaki Ninja 500`,
+      alt: {
+        en: `${profile.shortName} riding his Kawasaki Ninja 500`,
+        es: `${profile.shortName} montando en su Kawasaki Ninja 500`,
+      },
       width: 1200,
       height: 1000,
     },
     equipment: [
-      { label: 'Motorbike', className: 'bg-yellow', icon: motorcycleEmoji },
-      { label: 'Road', className: 'bg-pink', icon: motorwayEmoji },
-      { label: 'Track', className: 'bg-green', icon: chequeredFlagEmoji },
+      {
+        label: { en: 'Motorbike', es: 'Moto' },
+        className: 'bg-yellow',
+        icon: motorcycleEmoji,
+      },
+      {
+        label: { en: 'Road', es: 'Carretera' },
+        className: 'bg-pink',
+        icon: motorwayEmoji,
+      },
+      {
+        label: { en: 'Track', es: 'Circuito' },
+        className: 'bg-green',
+        icon: chequeredFlagEmoji,
+      },
     ],
   },
   tech: {
     image: {
       src: vladTech,
-      alt: `${profile.shortName} coding at his desk`,
+      alt: {
+        en: `${profile.shortName} coding at his desk`,
+        es: `${profile.shortName} programando en su escritorio`,
+      },
       width: 1200,
       height: 1000,
     },
     equipment: [
-      { label: 'Laptop', className: 'bg-sky', icon: laptopEmoji },
-      { label: 'Coffee', className: 'bg-yellow', icon: hotBeverageEmoji },
-      { label: 'Chair', className: 'bg-pink', icon: chairEmoji },
+      {
+        label: { en: 'Laptop', es: 'Portátil' },
+        className: 'bg-sky',
+        icon: laptopEmoji,
+      },
+      {
+        label: { en: 'Coffee', es: 'Café' },
+        className: 'bg-yellow',
+        icon: hotBeverageEmoji,
+      },
+      {
+        label: { en: 'Chair', es: 'Silla' },
+        className: 'bg-pink',
+        icon: chairEmoji,
+      },
     ],
   },
   personal: {
     image: {
       src: vladPlant,
-      alt: `${profile.shortName} holding a potted plant in front of a colourful wall`,
+      alt: {
+        en: `${profile.shortName} holding a potted plant in front of a colourful wall`,
+        es: `${profile.shortName} sujetando una planta en maceta delante de una pared de colores`,
+      },
       width: 1086,
       height: 1448,
       position: '50% 11%',
     },
     equipment: [
-      { label: 'Plant', className: 'bg-green', icon: pottedPlantEmoji },
-      { label: 'Books', className: 'bg-yellow', icon: booksEmoji },
-      { label: 'Sunglasses', className: 'bg-pink', icon: sunglassesEmoji },
+      {
+        label: { en: 'Plant', es: 'Planta' },
+        className: 'bg-green',
+        icon: pottedPlantEmoji,
+      },
+      {
+        label: { en: 'Books', es: 'Libros' },
+        className: 'bg-yellow',
+        icon: booksEmoji,
+      },
+      {
+        label: { en: 'Sunglasses', es: 'Gafas' },
+        className: 'bg-pink',
+        icon: sunglassesEmoji,
+      },
     ],
   },
   adventures: {
     image: {
       src: vladAdventures,
-      alt: `${profile.shortName} rock climbing`,
+      alt: {
+        en: `${profile.shortName} rock climbing`,
+        es: `${profile.shortName} escalando`,
+      },
       width: 1086,
       height: 1448,
       position: '50% 37%',
     },
     equipment: [
-      { label: 'Mountains', className: 'bg-pink', icon: mountainEmoji },
-      { label: 'Boots', className: 'bg-sky', icon: hikingBootEmoji },
-      { label: 'Backpack', className: 'bg-yellow', icon: backpackEmoji },
+      {
+        label: { en: 'Mountains', es: 'Montañas' },
+        className: 'bg-pink',
+        icon: mountainEmoji,
+      },
+      {
+        label: { en: 'Boots', es: 'Botas' },
+        className: 'bg-sky',
+        icon: hikingBootEmoji,
+      },
+      {
+        label: { en: 'Backpack', es: 'Mochila' },
+        className: 'bg-yellow',
+        icon: backpackEmoji,
+      },
     ],
   },
 };
 
 // Shown as logos only; `name` is the accessible label and tooltip.
 export const techLoadout: readonly {
-  category: string;
+  category: Localized<string>;
   items: readonly { name: string; image: string }[];
 }[] = [
   {
-    category: 'Languages',
+    category: { en: 'Languages', es: 'Lenguajes' },
     items: [
       { name: 'Java', image: javaLogo },
       { name: 'Python', image: pythonLogo },
@@ -408,14 +635,14 @@ export const techLoadout: readonly {
     ],
   },
   {
-    category: 'Frameworks',
+    category: { en: 'Frameworks', es: 'Frameworks' },
     items: [
       { name: 'Spring Boot', image: springBootLogo },
       { name: 'Angular', image: angularLogo },
     ],
   },
   {
-    category: 'Data',
+    category: { en: 'Data', es: 'Datos' },
     items: [
       { name: 'PostgreSQL', image: postgresqlLogo },
       { name: 'MongoDB', image: mongodbLogo },
@@ -423,28 +650,28 @@ export const techLoadout: readonly {
     ],
   },
   {
-    category: 'Cloud',
+    category: { en: 'Cloud', es: 'Cloud' },
     items: [
       { name: 'AWS', image: awsLogo },
       { name: 'Azure', image: azureLogo },
     ],
   },
   {
-    category: 'DevOps',
+    category: { en: 'DevOps', es: 'DevOps' },
     items: [
       { name: 'Docker', image: dockerLogo },
       { name: 'Kubernetes', image: kubernetesLogo },
     ],
   },
   {
-    category: 'CI/CD',
+    category: { en: 'CI/CD', es: 'CI/CD' },
     items: [
       { name: 'Git', image: gitLogo },
       { name: 'GitLab CI/CD', image: gitlabLogo },
     ],
   },
   {
-    category: 'Quality',
+    category: { en: 'Quality', es: 'Calidad' },
     items: [
       { name: 'JUnit', image: junitLogo },
       { name: 'SonarQube', image: sonarqubeLogo },
@@ -454,68 +681,109 @@ export const techLoadout: readonly {
 
 export type Project = {
   number: string;
+  /** Product names, the same in every language. */
   title: string;
-  context: string;
-  tags: readonly string[];
-  image: { src: string; alt: string };
+  context: Localized<string>;
+  tags: Localized<readonly string[]>;
+  image: { src: string; alt: Localized<string> };
   /** Public website, opened in a new tab from the preview. */
   liveUrl?: string;
 };
 
+// Spanish contexts follow the Spanish CV ("Desarrollo integral").
 export const projects: readonly Project[] = [
   {
     number: '01',
     title: 'Verisure Platform',
-    context: 'Securitas Direct · Backend Lead',
-    tags: ['Java 17', 'Spring Boot', 'Redis', 'SonarQube'],
+    context: {
+      en: 'Securitas Direct · Backend Lead',
+      es: 'Securitas Direct · Backend Lead',
+    },
+    tags: {
+      en: ['Java 17', 'Spring Boot', 'Redis', 'SonarQube'],
+      es: ['Java 17', 'Spring Boot', 'Redis', 'SonarQube'],
+    },
     liveUrl: 'https://www.verisure.es',
     image: {
       src: securitasDirectScreenshot,
-      alt: 'My Verisure app by Securitas Direct on a phone, next to a Verisure alarm unit',
+      alt: {
+        en: 'My Verisure app by Securitas Direct on a phone, next to a Verisure alarm unit',
+        es: 'La app My Verisure de Securitas Direct en un móvil, junto a una central de alarma Verisure',
+      },
     },
   },
   {
     number: '02',
     title: 'MotoGP App',
-    context: 'MotoGP & Estrella Galicia · Backend',
-    tags: ['AWS Lambda', 'API Gateway', 'Aurora'],
+    context: {
+      en: 'MotoGP & Estrella Galicia · Backend',
+      es: 'MotoGP & Estrella Galicia · Backend',
+    },
+    tags: {
+      en: ['AWS Lambda', 'API Gateway', 'Aurora'],
+      es: ['AWS Lambda', 'API Gateway', 'Aurora'],
+    },
     liveUrl: 'https://www.motogp.com/en/apps',
     image: {
       src: experienceNowScreenshot,
-      alt: 'MotoGP app screens showing the calendar, circuit mode and live timing',
+      alt: {
+        en: 'MotoGP app screens showing the calendar, circuit mode and live timing',
+        es: 'Pantallas de la app de MotoGP con el calendario, el modo circuito y los tiempos en directo',
+      },
     },
   },
   {
     number: '03',
     title: 'Cierzo Sports',
-    context: 'End-to-End Developer',
-    tags: ['Frontend', 'Backend', 'Payments', 'Hosting'],
+    context: { en: 'End-to-End Developer', es: 'Desarrollo integral' },
+    tags: {
+      en: ['Frontend', 'Backend', 'Payments', 'Hosting'],
+      es: ['Frontend', 'Backend', 'Pagos', 'Alojamiento'],
+    },
     liveUrl: 'https://cierzolgtb.org',
     image: {
       src: cierzolgtbScreenshot,
-      alt: 'Cierzo Sports team selection page with a grid of sports photos',
+      alt: {
+        en: 'Cierzo Sports team selection page with a grid of sports photos',
+        es: 'Página de selección de equipos de Cierzo Sports con una cuadrícula de fotos deportivas',
+      },
     },
   },
   {
     number: '04',
     title: 'Elisa Designer',
-    context: 'End-to-End Developer',
-    tags: ['Frontend', 'Animations', 'Deployment'],
+    context: { en: 'End-to-End Developer', es: 'Desarrollo integral' },
+    tags: {
+      en: ['Frontend', 'Animations', 'Deployment'],
+      es: ['Frontend', 'Animaciones', 'Despliegue'],
+    },
     liveUrl: 'https://elisandesign.com',
     image: {
       src: elisandesignScreenshot,
-      alt: 'Elisa Designer portfolio home page with a bento grid layout',
+      alt: {
+        en: 'Elisa Designer portfolio home page with a bento grid layout',
+        es: 'Página de inicio del portfolio de Elisa Designer con una cuadrícula bento',
+      },
     },
   },
   {
     number: '05',
     title: 'Visco',
-    context: 'Web Agency · End-to-End Developer',
-    tags: ['Frontend', 'Landing Page', 'Branding'],
+    context: {
+      en: 'Web Agency · End-to-End Developer',
+      es: 'Agencia web · Desarrollo integral',
+    },
+    tags: {
+      en: ['Frontend', 'Landing Page', 'Branding'],
+      es: ['Frontend', 'Landing Page', 'Branding'],
+    },
     liveUrl: 'https://visco.uno',
     image: {
       src: viscoScreenshot,
-      alt: 'Visco agency landing page with the headline “Lanza tu marca con un diseño que marca la diferencia”',
+      alt: {
+        en: 'Visco agency landing page with the headline “Lanza tu marca con un diseño que marca la diferencia”',
+        es: 'Landing page de la agencia Visco con el titular “Lanza tu marca con un diseño que marca la diferencia”',
+      },
     },
   },
 ];

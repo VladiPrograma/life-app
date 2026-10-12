@@ -1,6 +1,6 @@
 # Life App frontend foundation
 
-A React application built from supplied designs. Its first feature, `src/features/conversation/`, is a sequential, videogame-style dialogue scene driven by a data-only flow (`demo-conversation.ts`) at `/chat`. It uses CSS Modules at the brief's request and React Router for navigation; there is no remote data or component library yet. The root route `/` renders the neobrutalist home page from `src/features/home/`. Unknown routes show a minimal page-not-found message.
+A React application built from supplied designs. Its first feature, `src/features/conversation/`, is a sequential, videogame-style dialogue scene driven by a data-only flow (`demo-conversation.ts`) at `/chat`. It uses CSS Modules at the brief's request and React Router for navigation; there is no remote data or component library yet. The root route `/` renders the neobrutalist home page from `src/features/home/` in English, and `/es` renders it in Spanish. Unknown routes show a minimal page-not-found message.
 
 ## Mandatory project skill
 
@@ -20,7 +20,7 @@ npx playwright install chromium
 npm run dev
 ```
 
-Open `/` (home) or `/chat` at the local URL printed by Vite. No `.env` file is required. For Linux browser system dependencies, use `npx playwright install --with-deps chromium`.
+Open `/` (home), `/es` (Spanish home) or `/chat` at the local URL printed by Vite. No `.env` file is required. For Linux browser system dependencies, use `npx playwright install --with-deps chromium`.
 
 ## Architecture
 
@@ -28,8 +28,8 @@ Open `/` (home) or `/chat` at the local URL printed by Vite. No `.env` file is r
 src/
   app/
     app.tsx              Application composition and minimal shell
-    providers/           Reserved for providers with actual consumers
-    router/              Route definitions (home at /, conversation at /chat)
+    providers/           Providers with actual consumers (route locale)
+    router/              Route definitions (home at / and /es, conversation at /chat)
     styles/app.css       Tailwind entry and global browser defaults
   features/              Future domain modules, created only as needed
   components/
@@ -37,6 +37,7 @@ src/
     layout/              Layouts after genuine reuse exists
   lib/
     env.ts               Validated public environment boundary
+    i18n/locale.ts       Supported locales, their paths and the locale context
     api/                 Future shared transport concerns
     validation/          Future shared validation rules
     utils/               Genuinely shared non-domain utilities
@@ -54,6 +55,12 @@ Feature folders may contain `api/`, `components/`, `hooks/`, `schemas/`, `types/
 Application composition depends on features; features may depend on shared components and libraries. Shared code must not depend on features or application composition. ESLint prevents those reverse alias imports, deep relative imports, and decentralized environment access. Cross-feature orchestration belongs in `app/`; the dependency policy also applies to imports not statically covered by lint.
 
 The runtime dependencies are React, React DOM, React Router, and Zod. React Router uses declarative routes with a browser router at startup. Version 7.18.4 supports the project's pinned Node version. TanStack Query and React Hook Form are deferred until remote state or non-trivial forms justify them. No extra providers or speculative UI primitives are needed for the shell. TypeScript 6.0.3 is pinned for compatibility with typed ESLint; jsdom 28 supports the validated Node version.
+
+### Languages
+
+The home page exists in English (`/`) and Spanish (`/es`); no translation library is used. `src/lib/i18n/locale.ts` lists the locales and their paths, and each route wraps the page in `LocaleProvider`, which also sets `<html lang>`. Components read the language with `useLocale()` and keep their copy next to their markup in a `localized({ en, es })` block; shared content in `home-content.ts` localizes only the values that change, as `{ en, es }`. TypeScript rejects a Spanish entry with missing or extra keys. Each language has its own CV PDF in `src/assets/documents/`. The `/chat` demo is English only.
+
+`index.html` carries the English metadata and `hreflang` links; on `/es` the page switches the description and canonical link at runtime. Social previews do not run JavaScript, so shared `/es` links preview in English.
 
 ## Commands
 
@@ -115,7 +122,7 @@ Unevidenced Tailwind palette, typography, radius, shadow, breakpoint, and contai
 
 `.env.example` documents the empty configuration contract. `src/lib/env.ts` validates Vite's `BASE_URL` and `MODE` at startup and is the only application module allowed to read `import.meta.env`. Add custom variables to that schema and `.env.example` when needed, with useful validation messages. Required settings should fail early rather than cause later undefined behavior. All `VITE_*` values are public build-time data; credentials belong on a server, never in this repository or the client bundle.
 
-`npm run build` produces static assets in `dist/`. `npm run preview` is a local inspection server, not a production host. The production Docker image serves these assets through Nginx, with an `index.html` fallback for application routes such as `/chat` so direct visits and refreshes work.
+`npm run build` produces static assets in `dist/`. `npm run preview` is a local inspection server, not a production host. The production Docker image serves these assets through Nginx, with an `index.html` fallback for application routes such as `/es` and `/chat` so direct visits and refreshes work.
 
 ### Deploy with Dokploy
 

@@ -1,9 +1,19 @@
 import { render, screen, within } from '@testing-library/react';
+import { MemoryRouter } from 'react-router';
 import { expect, test } from 'vitest';
 import { HomePage } from '@/features/home/components/home-page';
 
+// The header's language switch links between routes.
+function renderHomePage() {
+  render(
+    <MemoryRouter>
+      <HomePage />
+    </MemoryRouter>,
+  );
+}
+
 test('renders every section with in-page navigation targets', () => {
-  render(<HomePage />);
+  renderHomePage();
 
   expect(
     screen.getByRole('heading', {
@@ -20,7 +30,7 @@ test('renders every section with in-page navigation targets', () => {
 });
 
 test('offers email as the contact channel', () => {
-  render(<HomePage />);
+  renderHomePage();
 
   const contact = screen.getByRole('region', {
     name: 'Let’s build something cool.',
@@ -31,7 +41,7 @@ test('offers email as the contact channel', () => {
 });
 
 test('keeps header and footer landmarks outside main', () => {
-  render(<HomePage />);
+  renderHomePage();
 
   const main = screen.getByRole('main');
   expect(main).not.toContainElement(screen.getByRole('banner'));

@@ -21,6 +21,30 @@ import {
   type BioSegment,
   type HighlightColor,
 } from '@/features/home/home-content';
+import { localized, useLocale, type Localized } from '@/lib/i18n/locale';
+
+const copy = localized({
+  en: {
+    tabs: 'About me',
+    bioTitle: 'Player bio',
+    techTitle: 'Skill tree',
+    halfYearLegend: '= 6 months',
+    personalTitle: 'Off the clock',
+    nowReading: 'Now reading',
+    adventuresTitle: 'Side quests',
+    soon: 'Soon',
+  },
+  es: {
+    tabs: 'Sobre mí',
+    bioTitle: 'Bio del jugador',
+    techTitle: 'Árbol de habilidades',
+    halfYearLegend: '= 6 meses',
+    personalTitle: 'Tiempo libre',
+    nowReading: 'Leyendo ahora',
+    adventuresTitle: 'Misiones secundarias',
+    soon: 'Pronto',
+  },
+});
 
 // Each tab shares its colour with its panel title. The active tab's bottom
 // border takes the fill so the tab merges into the panel below.
@@ -54,6 +78,7 @@ export function AboutPlayerCard({
   activeTab,
   onTabChange: setActiveTab,
 }: AboutPlayerCardProps) {
+  const locale = useLocale();
   const tabRefs = useRef(new Map<TabId, HTMLButtonElement>());
   const baseId = useId();
 
@@ -83,7 +108,7 @@ export function AboutPlayerCard({
     <div className="flex flex-col">
       <div
         role="tablist"
-        aria-label="About me"
+        aria-label={copy[locale].tabs}
         onKeyDown={handleKeyDown}
         className="relative z-10 grid grid-cols-2 gap-1.5 md:flex md:gap-2"
       >
@@ -107,7 +132,7 @@ export function AboutPlayerCard({
                 isActive ? tabColors[tab.id].active : tabColors[tab.id].idle
               }`}
             >
-              {tab.label}
+              {tab.label[locale]}
             </button>
           );
         })}
@@ -192,11 +217,13 @@ function HighlightedText({ segments }: { segments: readonly BioSegment[] }) {
 }
 
 function BioPanel() {
+  const locale = useLocale();
+
   return (
     <>
-      <PanelTitle className="bg-yellow">Player bio</PanelTitle>
+      <PanelTitle className="bg-yellow">{copy[locale].bioTitle}</PanelTitle>
       <div className="mt-5">
-        {aboutBio.map((paragraph, index) => (
+        {aboutBio[locale].map((paragraph, index) => (
           <p
             key={index}
             className={
@@ -209,7 +236,7 @@ function BioPanel() {
           </p>
         ))}
         <p className="mt-3 text-base leading-relaxed">
-          <HighlightedText segments={aboutBioInvite} />
+          <HighlightedText segments={aboutBioInvite[locale]} />
         </p>
         <div className="mt-5">
           <SocialLinks />
@@ -220,6 +247,8 @@ function BioPanel() {
 }
 
 function TechPanel() {
+  const locale = useLocale();
+  const text = copy[locale];
   const now = new Date();
   const jobs = careerJobs.map((job) => ({
     job,
@@ -241,7 +270,7 @@ function TechPanel() {
   return (
     <>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
-        <PanelTitle className="bg-sky">Skill tree</PanelTitle>
+        <PanelTitle className="bg-sky">{text.techTitle}</PanelTitle>
         <p className="font-mono text-sm leading-none font-bold uppercase">
           {profile.role}
         </p>
@@ -263,7 +292,7 @@ function TechPanel() {
             aria-hidden="true"
             className="size-3.5 border-2 border-ink bg-paper"
           />
-          = 6 months
+          {text.halfYearLegend}
         </span>
       </div>
 
@@ -278,7 +307,7 @@ function TechPanel() {
             </span>
             <span className="text-right font-mono text-xs leading-none font-bold md:order-last">
               <span className="sr-only">: </span>
-              {formatHalfYears(tech.total)}
+              {formatHalfYears(tech.total, locale)}
             </span>
             {/* Used periods fill from the left in career order; the
                     remaining squares stay empty up to the full career. */}
@@ -314,12 +343,15 @@ function TechPanel() {
 }
 
 function PersonalPanel() {
+  const locale = useLocale();
+  const text = copy[locale];
+
   return (
     <>
-      <PanelTitle className="bg-pink">Off the clock</PanelTitle>
+      <PanelTitle className="bg-pink">{text.personalTitle}</PanelTitle>
 
       <div className="mt-5">
-        {aboutPersonal.map((paragraph, index) => (
+        {aboutPersonal[locale].map((paragraph, index) => (
           <p key={index} className="mt-3 text-base leading-relaxed first:mt-0">
             <HighlightedText segments={paragraph} />
           </p>
@@ -330,7 +362,7 @@ function PersonalPanel() {
         <BookIcon className="size-10 shrink-0" />
         <p className="leading-none">
           <span className="block font-mono text-xs font-bold uppercase">
-            Now reading
+            {text.nowReading}
           </span>
           <span className="mt-1.5 block font-display text-lead font-black tracking-tight">
             {aboutReading.title}
@@ -345,12 +377,16 @@ function PersonalPanel() {
 }
 
 function AdventuresPanel() {
+  const locale = useLocale();
+
   return (
     <>
-      <PanelTitle className="bg-green">Side quests</PanelTitle>
+      <PanelTitle className="bg-green">
+        {copy[locale].adventuresTitle}
+      </PanelTitle>
 
       <div className="mt-5">
-        {aboutAdventuresText.map((paragraph, index) => (
+        {aboutAdventuresText[locale].map((paragraph, index) => (
           <p key={index} className="mt-3 text-base leading-relaxed first:mt-0">
             <HighlightedText segments={paragraph} />
           </p>
@@ -370,14 +406,17 @@ function PanelAction({
   link,
   className,
 }: {
-  link: { label: string; href: string };
+  link: { label: Localized<string>; href: string };
   className: string;
 }) {
+  const locale = useLocale();
+  const label = link.label[locale];
+
   return (
     <div className="mt-auto pt-7">
       {link.href ? (
         <ActionLink href={link.href} className={className}>
-          {link.label}
+          {label}
           <ArrowUpRightIcon className="size-4" />
         </ActionLink>
       ) : (
@@ -385,9 +424,9 @@ function PanelAction({
           aria-disabled="true"
           className="inline-flex cursor-not-allowed items-center gap-2.5 rounded-lg border-3 border-dashed border-ink/60 bg-paper/60 px-5 py-3 text-base leading-none font-bold whitespace-nowrap text-ink/60"
         >
-          {link.label}
+          {label}
           <span className="rounded-full border-2 border-ink/60 px-2 py-0.5 font-mono text-xs uppercase">
-            Soon
+            {copy[locale].soon}
           </span>
         </span>
       )}

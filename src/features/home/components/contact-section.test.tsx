@@ -48,11 +48,14 @@ test('sends a valid request and confirms it', async () => {
   submit();
 
   await waitFor(() => {
-    expect(sendContactRequest).toHaveBeenCalledWith({
-      name: 'Ada',
-      email: 'ada@example.com',
-      message: 'We need to split a monolith into services.',
-    });
+    expect(sendContactRequest).toHaveBeenCalledWith(
+      {
+        name: 'Ada',
+        email: 'ada@example.com',
+        message: 'We need to split a monolith into services.',
+      },
+      'en',
+    );
   });
   expect(await screen.findByRole('status')).toHaveTextContent(
     'Your email app should open',
