@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import { AboutSection } from '@/features/home/components/about-section';
 import { ContactSection } from '@/features/home/components/contact-section';
 import { HeroSection } from '@/features/home/components/hero-section';
@@ -11,6 +12,11 @@ import {
   valuesTicker,
 } from '@/features/home/home-content';
 import { usePageMetadata } from '@/features/home/hooks/use-page-metadata';
+import { useScrollAnimations } from '@/features/home/hooks/use-scroll-animations';
+import {
+  SmoothScrollContext,
+  useSmoothScroll,
+} from '@/features/home/hooks/use-smooth-scroll';
 import { useLocale } from '@/lib/i18n/locale';
 import styles from '@/features/home/components/home-page.module.css';
 
@@ -20,28 +26,33 @@ import styles from '@/features/home/components/home-page.module.css';
 export function HomePage() {
   const locale = useLocale();
   usePageMetadata(pageMetadata[locale]);
+  const pageRef = useRef<HTMLDivElement>(null);
+  const smoothScroll = useSmoothScroll();
+  useScrollAnimations(pageRef);
 
   return (
-    <div className={`${styles.page} bg-paper text-ink`}>
-      <SiteHeader />
-      <main>
-        <HeroSection />
-        <ProjectsSection />
-        <SectionTicker
-          items={valuesTicker[locale]}
-          className="border-b-3 border-ink bg-yellow text-ink"
-          separatorClassName="text-pink"
-        />
-        <AboutSection />
-        <SectionTicker
-          items={hobbiesTicker[locale]}
-          className="bg-pink text-ink"
-          separatorClassName="text-blue"
-          reverse
-        />
-        <ContactSection />
-      </main>
-      <SiteFooter />
-    </div>
+    <SmoothScrollContext value={smoothScroll}>
+      <div ref={pageRef} className={`${styles.page} bg-paper text-ink`}>
+        <SiteHeader />
+        <main>
+          <HeroSection />
+          <ProjectsSection />
+          <SectionTicker
+            items={valuesTicker[locale]}
+            className="border-b-3 border-ink bg-yellow text-ink"
+            separatorClassName="text-pink"
+          />
+          <AboutSection />
+          <SectionTicker
+            items={hobbiesTicker[locale]}
+            className="bg-pink text-ink"
+            separatorClassName="text-blue"
+            reverse
+          />
+          <ContactSection />
+        </main>
+        <SiteFooter />
+      </div>
+    </SmoothScrollContext>
   );
 }

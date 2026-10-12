@@ -45,9 +45,10 @@
     color: var(--color-copy);
   }
 
-  /* Native smooth scrolling for in-page links; no scroll library needed. */
+  /* Native smooth scrolling for in-page links on pages without Lenis. Where
+     Lenis runs (html.lenis), it animates the scroll itself. */
   @media (prefers-reduced-motion: no-preference) {
-    :root {
+    :root:not(.lenis) {
       scroll-behavior: smooth;
     }
   }

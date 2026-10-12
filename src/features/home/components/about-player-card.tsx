@@ -15,7 +15,6 @@ import {
   aboutReading,
   aboutTabs as tabs,
   careerJobs,
-  profile,
   techExperience,
   type AboutTabId as TabId,
   type BioSegment,
@@ -271,9 +270,6 @@ function TechPanel() {
     <>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
         <PanelTitle className="bg-sky">{text.techTitle}</PanelTitle>
-        <p className="font-mono text-sm leading-none font-bold uppercase">
-          {profile.role}
-        </p>
       </div>
 
       {/* Legend: one square per half-year, coloured by employer. */}

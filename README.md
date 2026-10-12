@@ -62,6 +62,15 @@ The home page exists in English (`/`) and Spanish (`/es`); no translation librar
 
 `index.html` carries the English metadata and `hreflang` links; on `/es` the page switches the description and canonical link at runtime. Social previews do not run JavaScript, so shared `/es` links preview in English.
 
+### Motion
+
+The home page scrolls with Lenis and animates with GSAP ScrollTrigger; both ship in a separate `motion` chunk. `useSmoothScroll()` smooths wheel scrolling (touch stays native), drives Lenis from the GSAP ticker, and glides in-page `#` links while updating the hash through the router. Code that scrolls the page itself must go through the Lenis instance from `SmoothScrollContext`, as the projects accordion does, or Lenis glides back to its own position. `useScrollAnimations()` reads data attributes in the markup:
+
+- `data-reveal="rise|pop|drop"` animates an element in the first time it enters the viewport; `data-reveal-children` does the same for each direct child. Elements entering together play in page order, which also staggers the hero on load.
+- `data-parallax="<percent>"` and `data-spin="<degrees>"` move or turn an element while its section crosses the viewport.
+
+GSAP animates `transform`, so the Tailwind tilts and offsets (`rotate`, `translate`) stay intact. With `prefers-reduced-motion: reduce` neither library runs: scrolling is native and everything renders in its final state. The Playwright suites use reduced motion, so screenshots stay deterministic; check animations in a browser without it.
+
 ## Commands
 
 | Command                      | Purpose                                                            |
