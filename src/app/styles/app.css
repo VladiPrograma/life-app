@@ -19,6 +19,17 @@
   font-display: swap;
 }
 
+/* Bundled so labels render identically on every system; Windows 11 ships
+   it, but macOS, mobile and the CI runner do not. */
+@font-face {
+  font-family: 'Cascadia Mono';
+  src: url('../../assets/fonts/cascadia-mono/cascadia-mono-variable.woff2')
+    format('woff2');
+  font-style: normal;
+  font-weight: 200 700;
+  font-display: swap;
+}
+
 /* Blueprint grid behind the hero and about sections. */
 @utility bg-grid {
   background-image:

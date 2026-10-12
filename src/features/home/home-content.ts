@@ -1,9 +1,9 @@
 import backpackEmoji from '@/assets/icons/emoji/backpack.svg';
 import booksEmoji from '@/assets/icons/emoji/books.svg';
 import chairEmoji from '@/assets/icons/emoji/chair.svg';
+import chequeredFlagEmoji from '@/assets/icons/emoji/chequered-flag.svg';
 import hikingBootEmoji from '@/assets/icons/emoji/hiking-boot.svg';
 import hotBeverageEmoji from '@/assets/icons/emoji/hot-beverage.svg';
-import keyboardEmoji from '@/assets/icons/emoji/keyboard.svg';
 import laptopEmoji from '@/assets/icons/emoji/laptop.svg';
 import motorcycleEmoji from '@/assets/icons/emoji/motorcycle.svg';
 import motorwayEmoji from '@/assets/icons/emoji/motorway.svg';
@@ -14,20 +14,22 @@ import vladAdventures from '@/assets/about/vlad-adventures.webp';
 import vladPlant from '@/assets/about/vlad-plant.webp';
 import vladMoto from '@/assets/about/vlad-moto.webp';
 import vladTech from '@/assets/about/vlad-tech.webp';
+import angularLogo from '@/assets/icons/angular.svg';
 import awsLogo from '@/assets/icons/aws.svg';
 import azureLogo from '@/assets/icons/azure.svg';
 import dockerLogo from '@/assets/icons/docker.svg';
-import grafanaLogo from '@/assets/icons/grafana.svg';
+import gitLogo from '@/assets/icons/git.svg';
+import gitlabLogo from '@/assets/icons/gitlab.svg';
 import javaLogo from '@/assets/icons/java.svg';
-import kafkaLogo from '@/assets/icons/kafka.svg';
-import kibanaLogo from '@/assets/icons/kibana.svg';
+import junitLogo from '@/assets/icons/junit.svg';
 import kubernetesLogo from '@/assets/icons/kubernetes.svg';
 import mongodbLogo from '@/assets/icons/mongodb.svg';
-import openshiftLogo from '@/assets/icons/openshift.svg';
 import postgresqlLogo from '@/assets/icons/postgresql.svg';
 import pythonLogo from '@/assets/icons/python.svg';
 import redisLogo from '@/assets/icons/redis.svg';
+import sonarqubeLogo from '@/assets/icons/sonarqube.svg';
 import springBootLogo from '@/assets/icons/spring-boot.svg';
+import typescriptLogo from '@/assets/icons/typescript.svg';
 import cierzolgtbScreenshot from '@/assets/projects/cierzolgtb.webp';
 import elisandesignScreenshot from '@/assets/projects/elisandesign.webp';
 import experienceNowScreenshot from '@/assets/projects/experience-now.webp';
@@ -189,7 +191,9 @@ export const careerJobs: readonly CareerJob[] = [
 
 // Technologies the CV ties to a job, with where they were used. Assumption:
 // the CV names Spring Boot only for Geoportail, but Renfe's and Securitas
-// Direct's Java microservices are counted as Spring Boot too.
+// Direct's Java microservices are counted as Spring Boot too. Angular,
+// MongoDB and GitLab CI/CD also count Securitas Direct, as the user asked
+// for at least three years of each.
 export const techExperience: readonly {
   name: string;
   jobs: readonly CareerJobId[];
@@ -204,11 +208,11 @@ export const techExperience: readonly {
   },
   {
     name: 'Angular',
-    jobs: ['geoportail'],
+    jobs: ['geoportail', 'securitas'],
   },
   {
     name: 'MongoDB',
-    jobs: ['geoportail'],
+    jobs: ['geoportail', 'securitas'],
   },
   {
     name: 'AWS',
@@ -216,7 +220,7 @@ export const techExperience: readonly {
   },
   {
     name: 'GitLab CI/CD',
-    jobs: ['geoportail'],
+    jobs: ['geoportail', 'securitas'],
   },
   {
     name: 'Redis',
@@ -344,7 +348,7 @@ export const aboutScenes: Record<AboutTabId, AboutScene> = {
     equipment: [
       { label: 'Motorbike', className: 'bg-yellow', icon: motorcycleEmoji },
       { label: 'Road', className: 'bg-pink', icon: motorwayEmoji },
-      { label: 'Keyboard', className: 'bg-green', icon: keyboardEmoji },
+      { label: 'Track', className: 'bg-green', icon: chequeredFlagEmoji },
     ],
   },
   tech: {
@@ -400,11 +404,15 @@ export const techLoadout: readonly {
     items: [
       { name: 'Java', image: javaLogo },
       { name: 'Python', image: pythonLogo },
+      { name: 'TypeScript', image: typescriptLogo },
     ],
   },
   {
     category: 'Frameworks',
-    items: [{ name: 'Spring Boot', image: springBootLogo }],
+    items: [
+      { name: 'Spring Boot', image: springBootLogo },
+      { name: 'Angular', image: angularLogo },
+    ],
   },
   {
     category: 'Data',
@@ -414,7 +422,6 @@ export const techLoadout: readonly {
       { name: 'Redis', image: redisLogo },
     ],
   },
-  { category: 'Messaging', items: [{ name: 'Kafka', image: kafkaLogo }] },
   {
     category: 'Cloud',
     items: [
@@ -427,14 +434,20 @@ export const techLoadout: readonly {
     items: [
       { name: 'Docker', image: dockerLogo },
       { name: 'Kubernetes', image: kubernetesLogo },
-      { name: 'OpenShift', image: openshiftLogo },
     ],
   },
   {
-    category: 'Observability',
+    category: 'CI/CD',
     items: [
-      { name: 'Grafana', image: grafanaLogo },
-      { name: 'Kibana', image: kibanaLogo },
+      { name: 'Git', image: gitLogo },
+      { name: 'GitLab CI/CD', image: gitlabLogo },
+    ],
+  },
+  {
+    category: 'Quality',
+    items: [
+      { name: 'JUnit', image: junitLogo },
+      { name: 'SonarQube', image: sonarqubeLogo },
     ],
   },
 ];

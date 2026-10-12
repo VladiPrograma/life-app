@@ -1,17 +1,46 @@
 import { useState } from 'react';
+import { flushSync } from 'react-dom';
 import { ArrowUpRightIcon } from '@/features/home/components/icons';
 import { ProjectPreview } from '@/features/home/components/project-preview';
 import { projects } from '@/features/home/home-content';
+import { useIsWideLayout } from '@/features/home/hooks/use-is-wide-layout';
 
 // Tag chips reuse the hero sticker palette, cycling per position.
 const tagColors = ['bg-yellow', 'bg-pink', 'bg-green', 'bg-paper'];
 
 // Layout follows the supplied design. Assumption: the reference uses
 // a condensed display face that was not supplied; Red Hat Display stands in.
+// Below `lg` the list is a single column, so the preview opens under the
+// selected project instead of above the list, where it would change out of
+// sight.
 export function ProjectsSection() {
   const [activeNumber, setActiveNumber] = useState(projects[0]?.number);
+  const isWide = useIsWideLayout();
   const activeProject =
     projects.find((project) => project.number === activeNumber) ?? projects[0];
+
+  function selectProject(number: string, trigger: HTMLElement) {
+    if (number === activeProject?.number) return;
+    if (isWide) {
+      setActiveNumber(number);
+      return;
+    }
+
+    // The previous preview may close above the tapped project. Keep the
+    // project where the user tapped it, then reveal its preview.
+    const topBefore = trigger.getBoundingClientRect().top;
+    flushSync(() => setActiveNumber(number));
+    // Instant, overriding the page's smooth scrolling, so the reveal below
+    // starts from the corrected position.
+    window.scrollBy({
+      top: trigger.getBoundingClientRect().top - topBefore,
+      behavior: 'instant',
+    });
+    trigger
+      .closest('li')
+      ?.querySelector('figure')
+      ?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+  }
 
   return (
     <section
@@ -30,27 +59,35 @@ export function ProjectsSection() {
           </h2>
         </div>
 
-        {activeProject ? (
-          <div className="relative flex flex-col items-center gap-10 overflow-clip px-6 py-16 md:px-10 lg:col-start-1 lg:row-span-2 lg:row-start-1 lg:items-start lg:justify-center lg:py-24 lg:pl-[10%]">
+        {activeProject && isWide ? (
+          <div className="relative flex flex-col items-start justify-center gap-10 overflow-clip py-24 pr-10 pl-[10%] lg:col-start-1 lg:row-span-2 lg:row-start-1">
             <ProjectPreview project={activeProject} />
           </div>
         ) : null}
 
-        <ul className="px-4 pb-16 md:px-10 lg:col-start-2 lg:row-start-2 lg:border-l-2 lg:border-line lg:px-8 lg:pb-24">
+        <ul className="px-4 pt-6 pb-16 md:px-10 lg:col-start-2 lg:row-start-2 lg:border-l-2 lg:border-line lg:px-8 lg:pt-0 lg:pb-24">
           {projects.map((project) => {
             const isActive = project.number === activeProject?.number;
 
             return (
               <li
                 key={project.number}
-                onMouseEnter={() => setActiveNumber(project.number)}
+                onPointerEnter={(event) => {
+                  if (event.pointerType === 'mouse') {
+                    selectProject(project.number, event.currentTarget);
+                  }
+                }}
                 className="grid max-w-[940px] grid-cols-[minmax(0,1fr)_auto] items-center gap-x-6 gap-y-4 border-b-2 border-line py-8 md:grid-cols-[minmax(0,1.25fr)_auto_minmax(0,1fr)] lg:py-10"
               >
                 <button
                   type="button"
                   aria-pressed={isActive}
-                  onClick={() => setActiveNumber(project.number)}
-                  onFocus={() => setActiveNumber(project.number)}
+                  onClick={(event) =>
+                    selectProject(project.number, event.currentTarget)
+                  }
+                  onFocus={(event) =>
+                    selectProject(project.number, event.currentTarget)
+                  }
                   className={`group col-span-2 grid grid-cols-subgrid items-center text-left transition-colors duration-150 hover:text-paper focus-visible:outline-3 focus-visible:outline-offset-[6px] focus-visible:outline-yellow ${
                     isActive ? 'text-paper' : 'text-paper/60'
                   }`}
@@ -80,6 +117,13 @@ export function ProjectsSection() {
                     </li>
                   ))}
                 </ul>
+
+                {isActive && !isWide ? (
+                  // Bleeds to the screen edges so the rays fill the width.
+                  <div className="relative col-span-full -mx-4 flex justify-center overflow-clip px-9 pt-14 pb-6 md:-mx-10 md:px-14">
+                    <ProjectPreview project={project} />
+                  </div>
+                ) : null}
               </li>
             );
           })}
