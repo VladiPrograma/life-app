@@ -34,7 +34,7 @@ export function AboutSection() {
         <SunburstRays />
       </div>
 
-      <div className="relative mx-auto max-w-page px-4 py-16 md:px-10 lg:py-24">
+      <div className="relative mx-auto max-w-[1600px] px-4 py-16 md:px-10 lg:py-24">
         <div className="flex items-center gap-4 rounded-md border-3 border-ink bg-yellow px-4 py-3 shadow-brutal-lg md:gap-6 md:px-6">
           <CodeMarkIcon className="size-8 shrink-0 md:size-10" />
           <h2
@@ -61,17 +61,20 @@ export function AboutSection() {
         </div>
 
         {/* Equal columns keep the backdrop divider in the middle of the gap. */}
-        <div className="mt-6 grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-6">
+        <div className="mt-6 grid gap-10 lg:grid-cols-2 lg:items-start lg:gap-[clamp(48px,7vw,144px)]">
           <AboutPlayerCard activeTab={activeTab} onTabChange={setActiveTab} />
           <AboutShowcase tab={activeTab} />
         </div>
 
-        <div className="mt-10 flex flex-col gap-5 rounded-md border-3 border-ink bg-cream p-4 shadow-brutal-lg lg:mt-6 lg:flex-row lg:items-center lg:gap-6 lg:py-3">
-          <h3 className="flex shrink-0 -rotate-2 items-center gap-3 self-start border-3 border-ink bg-pink px-4 py-2 font-display text-lead leading-none font-black uppercase shadow-brutal lg:self-center">
+        {/* The title and every logo group share one row from laptop widths
+            up; on narrower desktops the logos wrap below the title. The top
+            margin clears the equipment card hanging below the artwork. */}
+        <div className="mt-10 flex flex-col gap-5 rounded-md border-3 border-ink bg-cream p-4 shadow-brutal-lg md:px-6 lg:mt-24 lg:flex-row lg:flex-wrap lg:items-center lg:gap-x-6 lg:py-5">
+          <h3 className="flex shrink-0 -rotate-2 items-center gap-3 self-start border-3 border-ink bg-pink px-4 py-2 font-display text-lead leading-none font-black whitespace-nowrap uppercase shadow-brutal lg:self-center">
             <GearIcon className="size-[1.1em]" />
             Tech loadout
           </h3>
-          <ul className="grid grow grid-cols-2 gap-x-4 gap-y-5 md:grid-cols-4 lg:flex lg:justify-between lg:gap-0">
+          <ul className="grid grid-cols-2 gap-x-4 gap-y-5 md:grid-cols-4 lg:flex lg:flex-auto lg:flex-wrap lg:justify-between lg:gap-x-0 lg:gap-y-4">
             {techLoadout.map((group) => (
               <li
                 key={group.category}

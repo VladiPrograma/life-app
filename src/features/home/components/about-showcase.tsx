@@ -10,7 +10,9 @@ export function AboutShowcase({ tab }: { tab: AboutTabId }) {
   const scene = aboutScenes[tab];
 
   return (
-    <div className="relative mx-auto mb-24 flex w-full max-w-[600px] flex-col pt-8 md:mb-16 lg:mb-0 lg:max-w-[720px] lg:self-center lg:pt-0">
+    // Below `lg` the artwork comes first: it sits right above the tabs that
+    // switch it, instead of changing out of sight below the long card.
+    <div className="relative order-first mx-auto mb-24 flex w-full max-w-[600px] flex-col pt-8 md:mb-16 lg:order-none lg:mb-0 lg:max-w-[720px] lg:self-center lg:pt-0">
       <div className="relative aspect-[6/5] overflow-hidden rounded-t-full border-3 border-ink bg-cream shadow-brutal-lg">
         <img
           src={scene.image.src}
