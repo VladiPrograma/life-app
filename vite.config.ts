@@ -13,6 +13,17 @@ export default defineConfig({
     // inlined into the JavaScript bundle; other small assets keep the default.
     assetsInlineLimit: (filePath) =>
       filePath.endsWith('.svg') ? false : undefined,
+    // The scroll libraries ship as their own cacheable chunk; together with
+    // the app they would exceed the 500 kB chunk warning.
+    rolldownOptions: {
+      output: {
+        codeSplitting: {
+          groups: [
+            { name: 'motion', test: /node_modules[\\/](gsap|lenis)[\\/]/ },
+          ],
+        },
+      },
+    },
   },
   test: {
     environment: 'jsdom',

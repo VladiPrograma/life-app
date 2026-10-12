@@ -11,6 +11,7 @@ export function SunburstRays() {
     <svg
       aria-hidden="true"
       viewBox="-1000 -1000 2000 2000"
+      data-spin="40"
       className="pointer-events-none absolute top-1/2 left-1/2 size-[2000px] -translate-1/2"
     >
       {rayAngles.map((angle) => (
