@@ -191,7 +191,9 @@ export const careerJobs: readonly CareerJob[] = [
 
 // Technologies the CV ties to a job, with where they were used. Assumption:
 // the CV names Spring Boot only for Geoportail, but Renfe's and Securitas
-// Direct's Java microservices are counted as Spring Boot too.
+// Direct's Java microservices are counted as Spring Boot too. Angular,
+// MongoDB and GitLab CI/CD also count Securitas Direct, as the user asked
+// for at least three years of each.
 export const techExperience: readonly {
   name: string;
   jobs: readonly CareerJobId[];
@@ -206,11 +208,11 @@ export const techExperience: readonly {
   },
   {
     name: 'Angular',
-    jobs: ['geoportail'],
+    jobs: ['geoportail', 'securitas'],
   },
   {
     name: 'MongoDB',
-    jobs: ['geoportail'],
+    jobs: ['geoportail', 'securitas'],
   },
   {
     name: 'AWS',
@@ -218,7 +220,7 @@ export const techExperience: readonly {
   },
   {
     name: 'GitLab CI/CD',
-    jobs: ['geoportail'],
+    jobs: ['geoportail', 'securitas'],
   },
   {
     name: 'Redis',
