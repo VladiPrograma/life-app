@@ -1,13 +1,21 @@
 import { HeroTerminal } from '@/features/home/components/hero-terminal';
 import vladAvatar from '@/assets/illustrations/vlad-avatar.webp';
+import { useLocale, type Localized } from '@/lib/i18n/locale';
+
+const portraitAlt: Localized<string> = {
+  en: 'Portrait of Vlad',
+  es: 'Retrato de Vlad',
+};
 
 /** Personal photo portrait and terminal. */
 export function HeroShowcase() {
+  const locale = useLocale();
+
   return (
     <div className="relative mx-auto w-full max-w-[600px] pt-6 pb-[clamp(114px,23%,140px)]">
       <img
         src={vladAvatar}
-        alt="Portrait of Vlad"
+        alt={portraitAlt[locale]}
         width={1200}
         height={1080}
         fetchPriority="high"

@@ -1,4 +1,7 @@
 import { aboutScenes, type AboutTabId } from '@/features/home/home-content';
+import { useLocale, type Localized } from '@/lib/i18n/locale';
+
+const equipmentTitle: Localized<string> = { en: 'Equipment:', es: 'Equipo:' };
 
 /**
  * Player artwork side of the supplied design. The arch is a window
@@ -7,6 +10,7 @@ import { aboutScenes, type AboutTabId } from '@/features/home/home-content';
  * position set in their scene.
  */
 export function AboutShowcase({ tab }: { tab: AboutTabId }) {
+  const locale = useLocale();
   const scene = aboutScenes[tab];
 
   return (
@@ -16,7 +20,7 @@ export function AboutShowcase({ tab }: { tab: AboutTabId }) {
       <div className="relative aspect-[6/5] overflow-hidden rounded-t-full border-3 border-ink bg-cream shadow-brutal-lg">
         <img
           src={scene.image.src}
-          alt={scene.image.alt}
+          alt={scene.image.alt[locale]}
           width={scene.image.width}
           height={scene.image.height}
           loading="lazy"
@@ -31,11 +35,11 @@ export function AboutShowcase({ tab }: { tab: AboutTabId }) {
       <div className="absolute bottom-0 left-1/2 z-20 -translate-x-1/2 translate-y-[70%] md:translate-y-1/2">
         <div className="rounded-md border-3 border-ink bg-cream px-3 pt-2 pb-2.5 text-ink shadow-brutal-lg">
           <p className="font-mono text-xs leading-none font-black uppercase">
-            Equipment:
+            {equipmentTitle[locale]}
           </p>
           <ul className="mt-2 flex gap-2.5">
             {scene.equipment.map((item) => (
-              <li key={item.label} className="flex flex-col items-center">
+              <li key={item.label.en} className="flex flex-col items-center">
                 <div
                   className={`size-[clamp(56px,6vw,78px)] overflow-hidden rounded-sm border-3 border-ink ${item.className}`}
                 >
@@ -48,7 +52,7 @@ export function AboutShowcase({ tab }: { tab: AboutTabId }) {
                   />
                 </div>
                 <span className="mt-1 font-mono text-xs leading-none font-black uppercase">
-                  {item.label}
+                  {item.label[locale]}
                 </span>
               </li>
             ))}

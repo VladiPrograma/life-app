@@ -7,12 +7,40 @@ import {
   RocketIcon,
 } from '@/features/home/components/icons';
 import { emailHref, heroTicker, profile } from '@/features/home/home-content';
+import { localized, useLocale } from '@/lib/i18n/locale';
 
 // Each title word is a separate taped-on block with its own tilt.
 const titleBlockClassName =
   'inline-block border-3 border-ink px-[0.14em] pt-[0.06em] pb-[0.02em] shadow-brutal-lg md:border-4 md:shadow-brutal-xl';
 
+// The title stays in English in both languages, as in the Spanish CV.
+const copy = localized({
+  en: {
+    greeting: 'Hello, I’m Vlad',
+    leadStart: 'I solve big problems with',
+    leadHighlight: 'real solutions.',
+    intro:
+      'Give me a hard problem and I’m all in. I love digging into it until I understand every corner, losing track of time along the way. I enjoy putting myself to the test, and proving to myself, every time, that there’s always a way to solve it.',
+    viewProjects: 'View Projects',
+    letsBuild: 'Let’s Build',
+    emailMe: 'Email Me',
+  },
+  es: {
+    greeting: 'Hola, soy Vlad',
+    leadStart: 'Resuelvo grandes problemas con',
+    leadHighlight: 'soluciones reales.',
+    intro:
+      'Dame un problema difícil y me lanzo de cabeza. Me encanta escarbar en él hasta entender cada rincón, perdiendo la noción del tiempo por el camino. Disfruto poniéndome a prueba y demostrándome, cada vez, que siempre hay una forma de resolverlo.',
+    viewProjects: 'Ver proyectos',
+    letsBuild: 'Hablemos',
+    emailMe: 'Escríbeme',
+  },
+});
+
 export function HeroSection() {
+  const locale = useLocale();
+  const text = copy[locale];
+
   return (
     <section
       id="home"
@@ -28,11 +56,11 @@ export function HeroSection() {
         <div>
           <div className="flex flex-wrap items-center gap-3">
             <p className="-rotate-2 rounded-md border-3 border-ink bg-paper px-3 py-1.5 font-mono text-sm leading-none font-black text-ink uppercase shadow-brutal-sm">
-              Hello, I’m Vlad
+              {text.greeting}
             </p>
             <p className="inline-flex items-center gap-2 rounded-full border-3 border-ink bg-green px-3 py-1.5 font-mono text-sm leading-none font-black text-ink uppercase shadow-brutal-sm">
               <span className="size-2.5 rounded-full border-2 border-ink bg-paper" />
-              {profile.available}
+              {profile.available[locale]}
             </p>
           </div>
 
@@ -54,30 +82,27 @@ export function HeroSection() {
           </h1>
 
           <p className="mt-9 max-w-[600px] font-display text-lead leading-[1.75] font-bold">
-            I solve big problems with{' '}
+            {text.leadStart}{' '}
             <span className="rounded-md border-3 border-ink bg-yellow px-2 py-0.5 text-ink shadow-brutal [box-decoration-break:clone]">
-              real solutions.
+              {text.leadHighlight}
             </span>
           </p>
           <p className="mt-4 max-w-[560px] text-base leading-relaxed text-paper/80">
-            Give me a hard problem and I’m all in. I love digging into it until
-            I understand every corner, losing track of time along the way. I
-            enjoy putting myself to the test, and proving to myself, every time,
-            that there’s always a way to solve it.
+            {text.intro}
           </p>
 
           <div className="mt-9 flex flex-wrap gap-4">
             <ActionLink href="#projects" className="bg-yellow">
               <PlayIcon className="size-5" />
-              View Projects
+              {text.viewProjects}
             </ActionLink>
             <ActionLink href="#contact" className="bg-pink">
               <RocketIcon className="size-5" />
-              Let’s Build
+              {text.letsBuild}
             </ActionLink>
             <ActionLink href={emailHref} className="bg-paper">
               <MailIcon className="size-5" />
-              Email Me
+              {text.emailMe}
             </ActionLink>
           </div>
         </div>
