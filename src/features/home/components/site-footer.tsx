@@ -41,14 +41,20 @@ export function SiteFooter() {
     <footer className="overflow-clip">
       <div className="border-t-3 border-ink bg-pink text-ink">
         <div className="mx-auto max-w-page px-4 py-16 text-center md:px-10 lg:py-24">
-          <h2 className="font-display text-h2 leading-tight font-black text-balance text-yellow [-webkit-text-stroke:2px_var(--color-ink)] [paint-order:stroke_fill] [text-shadow:4px_4px_0_var(--color-ink)]">
+          <h2
+            data-reveal="pop"
+            className="font-display text-h2 leading-tight font-black text-balance text-yellow [-webkit-text-stroke:2px_var(--color-ink)] [paint-order:stroke_fill] [text-shadow:4px_4px_0_var(--color-ink)]"
+          >
             {text.thanks}
           </h2>
         </div>
       </div>
 
       <div className="border-t-3 border-ink bg-night text-paper/60">
-        <div className="mx-auto grid max-w-[1080px] grid-cols-2 gap-x-6 gap-y-9 px-4 py-12 md:grid-cols-4 md:px-10 lg:gap-x-10 lg:py-14">
+        <div
+          data-reveal-children="rise"
+          className="mx-auto grid max-w-[1080px] grid-cols-2 gap-x-6 gap-y-9 px-4 py-12 md:grid-cols-4 md:px-10 lg:gap-x-10 lg:py-14"
+        >
           <div>
             <h3 className={columnTitleClassName}>{text.basedIn}</h3>
             <p className="mt-4 text-sm leading-relaxed">

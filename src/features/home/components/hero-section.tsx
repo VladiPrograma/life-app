@@ -27,7 +27,7 @@ const copy = localized({
   },
   es: {
     greeting: 'Hola, soy Vlad',
-    leadStart: 'Resuelvo grandes problemas con',
+    leadStart: 'Resuelvo problemas con',
     leadHighlight: 'soluciones reales.',
     intro:
       'Dame un problema difícil y me lanzo de cabeza. Me encanta escarbar en él hasta entender cada rincón, perdiendo la noción del tiempo por el camino. Disfruto poniéndome a prueba y demostrándome, cada vez, que siempre hay una forma de resolverlo.',
@@ -54,7 +54,10 @@ export function HeroSection() {
 
       <div className="relative mx-auto grid max-w-page gap-14 px-4 pt-10 pb-14 md:px-10 md:pt-14 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,1fr)] lg:items-center lg:gap-12 lg:pt-12">
         <div>
-          <div className="flex flex-wrap items-center gap-3">
+          <div
+            data-reveal-children="pop"
+            className="flex flex-wrap items-center gap-3"
+          >
             <p className="-rotate-2 rounded-md border-3 border-ink bg-paper px-3 py-1.5 font-mono text-sm leading-none font-black text-ink uppercase shadow-brutal-sm">
               {text.greeting}
             </p>
@@ -68,30 +71,43 @@ export function HeroSection() {
             id="hero-title"
             className="mt-7 flex flex-col items-start gap-[0.16em] font-display text-display leading-[0.88] font-black text-ink uppercase"
           >
-            <span className={`${titleBlockClassName} -rotate-2 bg-paper`}>
+            <span
+              data-reveal="drop"
+              className={`${titleBlockClassName} -rotate-2 bg-paper`}
+            >
               Senior
             </span>{' '}
             <span
+              data-reveal="drop"
               className={`${titleBlockClassName} ml-[0.3em] rotate-1 bg-yellow`}
             >
               Software
             </span>{' '}
-            <span className={`${titleBlockClassName} -rotate-1 bg-pink`}>
+            <span
+              data-reveal="drop"
+              className={`${titleBlockClassName} -rotate-1 bg-pink`}
+            >
               Engineer
             </span>
           </h1>
 
-          <p className="mt-9 max-w-[600px] font-display text-lead leading-[1.75] font-bold">
+          <p
+            data-reveal="rise"
+            className="mt-9 max-w-[600px] font-display text-lead leading-[1.75] font-bold"
+          >
             {text.leadStart}{' '}
             <span className="rounded-md border-3 border-ink bg-yellow px-2 py-0.5 text-ink shadow-brutal [box-decoration-break:clone]">
               {text.leadHighlight}
             </span>
           </p>
-          <p className="mt-4 max-w-[560px] text-base leading-relaxed text-paper/80">
+          <p
+            data-reveal="rise"
+            className="mt-4 max-w-[560px] text-base leading-relaxed text-paper/80"
+          >
             {text.intro}
           </p>
 
-          <div className="mt-9 flex flex-wrap gap-4">
+          <div data-reveal-children="pop" className="mt-9 flex flex-wrap gap-4">
             <ActionLink href="#projects" className="bg-yellow">
               <PlayIcon className="size-5" />
               {text.viewProjects}

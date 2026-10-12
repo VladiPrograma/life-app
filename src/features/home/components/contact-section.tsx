@@ -184,13 +184,17 @@ export function ContactSection() {
 
       <div className="relative mx-auto grid max-w-page gap-14 px-4 py-16 md:px-10 lg:grid-cols-[minmax(0,0.95fr)_minmax(0,1fr)] lg:gap-20 lg:py-24">
         <div>
-          <p className="inline-flex -rotate-2 items-center gap-2 rounded-md border-3 border-ink bg-paper px-3 py-1.5 font-mono text-sm leading-none font-black text-ink uppercase shadow-brutal shadow-blue">
+          <p
+            data-reveal="pop"
+            className="inline-flex -rotate-2 items-center gap-2 rounded-md border-3 border-ink bg-paper px-3 py-1.5 font-mono text-sm leading-none font-black text-ink uppercase shadow-brutal shadow-blue"
+          >
             <SparkleIcon className="size-4" />
             {text.badge}
           </p>
 
           <h2
             id="contact-title"
+            data-reveal="rise"
             className="mt-7 flex flex-col items-start gap-[0.14em] font-display text-h2 leading-tight font-black"
           >
             <span>{text.titleStart}</span>{' '}
@@ -199,7 +203,10 @@ export function ContactSection() {
             </span>
           </h2>
 
-          <ul className="mt-9 grid gap-4 text-base leading-relaxed">
+          <ul
+            data-reveal-children="rise"
+            className="mt-9 grid gap-4 text-base leading-relaxed"
+          >
             {text.reasons.map((reason, index) => {
               const Icon = reasonIcons[index] ?? ChatIcon;
               return (
@@ -220,11 +227,14 @@ export function ContactSection() {
             })}
           </ul>
 
-          <p className="mt-7 max-w-[540px] text-base leading-relaxed text-paper/80">
+          <p
+            data-reveal="rise"
+            className="mt-7 max-w-[540px] text-base leading-relaxed text-paper/80"
+          >
             {text.promise}
           </p>
 
-          <div className="mt-8 flex flex-wrap gap-4">
+          <div data-reveal-children="pop" className="mt-8 flex flex-wrap gap-4">
             <ActionLink href={meetingHref} onDark className="bg-yellow">
               <CalendarIcon className="size-5" />
               {text.bookMeeting}
@@ -239,10 +249,11 @@ export function ContactSection() {
           </div>
         </div>
 
-        <div className="relative lg:pt-6">
+        <div data-reveal="rise" className="relative lg:pt-6">
           {/* Sticker hanging off the window corner. */}
           <span
             aria-hidden="true"
+            data-reveal="pop"
             className="absolute -top-5 right-4 z-10 rotate-6 rounded-lg border-3 border-ink bg-yellow px-3 py-1.5 font-display text-lg leading-none font-black text-ink shadow-brutal md:right-8 lg:top-0"
           >
             {text.sticker}

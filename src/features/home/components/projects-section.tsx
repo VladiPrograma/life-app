@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import { flushSync } from 'react-dom';
 import { ArrowUpRightIcon } from '@/features/home/components/icons';
 import { ProjectPreview } from '@/features/home/components/project-preview';
 import { projects } from '@/features/home/home-content';
 import { useIsWideLayout } from '@/features/home/hooks/use-is-wide-layout';
+import { SmoothScrollContext } from '@/features/home/hooks/use-smooth-scroll';
 import { localized, useLocale } from '@/lib/i18n/locale';
 
 // Tag chips reuse the hero sticker palette, cycling per position.
@@ -16,7 +17,7 @@ const copy = localized({
     technologies: (project: string) => `${project} technologies`,
   },
   es: {
-    titleExclamation: '¡Ostras!',
+    titleExclamation: '¡Toma!',
     titleQuestion: '¿Esto lo hice yo?',
     technologies: (project: string) => `Tecnologías de ${project}`,
   },
@@ -32,6 +33,7 @@ export function ProjectsSection() {
   const text = copy[locale];
   const [activeNumber, setActiveNumber] = useState(projects[0]?.number);
   const isWide = useIsWideLayout();
+  const smoothScroll = useContext(SmoothScrollContext);
   const activeProject =
     projects.find((project) => project.number === activeNumber) ?? projects[0];
 
@@ -45,13 +47,21 @@ export function ProjectsSection() {
     // The previous preview may close above the tapped project. Keep the
     // project where the user tapped it. Instant, overriding the page's smooth
     // scrolling, so the correction lands in the same frame and is not seen.
-    // The page never scrolls to reveal the new preview: the user scrolls.
+    // Lenis must make the jump itself, or it would glide back to its own
+    // position mid-scroll. The page never scrolls to reveal the new preview:
+    // the user scrolls.
     const topBefore = trigger.getBoundingClientRect().top;
     flushSync(() => setActiveNumber(number));
-    window.scrollBy({
-      top: trigger.getBoundingClientRect().top - topBefore,
-      behavior: 'instant',
-    });
+    const shift = trigger.getBoundingClientRect().top - topBefore;
+    if (smoothScroll) {
+      smoothScroll.resize();
+      smoothScroll.scrollTo(window.scrollY + shift, {
+        immediate: true,
+        force: true,
+      });
+    } else {
+      window.scrollBy({ top: shift, behavior: 'instant' });
+    }
   }
 
   return (
@@ -64,6 +74,7 @@ export function ProjectsSection() {
         <div className="px-4 pt-16 md:px-10 lg:col-start-2 lg:row-start-1 lg:border-l-2 lg:border-line lg:px-8 lg:pt-24">
           <h2
             id="projects-title"
+            data-reveal="rise"
             className="font-display text-h2 leading-none font-black uppercase"
           >
             <span className="text-yellow">{text.titleExclamation}</span>{' '}
@@ -72,20 +83,29 @@ export function ProjectsSection() {
         </div>
 
         {activeProject && isWide ? (
-          <div className="relative flex flex-col items-start justify-center gap-10 overflow-clip py-24 pr-10 pl-[10%] lg:col-start-1 lg:row-span-2 lg:row-start-1">
+          <div
+            data-reveal="pop"
+            className="relative flex flex-col items-start justify-center gap-10 overflow-clip py-24 pr-10 pl-[10%] lg:col-start-1 lg:row-span-2 lg:row-start-1"
+          >
             <ProjectPreview project={activeProject} />
           </div>
         ) : null}
 
-        <ul className="px-4 pt-6 pb-16 md:px-10 lg:col-start-2 lg:row-start-2 lg:border-l-2 lg:border-line lg:px-8 lg:pt-0 lg:pb-24">
+        <ul
+          data-reveal-children="rise"
+          className="px-4 pt-6 pb-16 md:px-10 lg:col-start-2 lg:row-start-2 lg:border-l-2 lg:border-line lg:px-8 lg:pt-0 lg:pb-24"
+        >
           {projects.map((project) => {
             const isActive = project.number === activeProject?.number;
 
             return (
               <li
                 key={project.number}
+                // Hover only previews beside the list. In the single column
+                // it would open projects inline as the page scrolls under a
+                // resting mouse, interrupting the scroll.
                 onPointerEnter={(event) => {
-                  if (event.pointerType === 'mouse') {
+                  if (isWide && event.pointerType === 'mouse') {
                     selectProject(project.number, event.currentTarget);
                   }
                 }}

@@ -184,6 +184,7 @@ export function SiteHeader() {
               setIsMenuOpen(false);
             }
           }}
+          data-lenis-prevent
           className="absolute inset-x-0 top-full max-h-[calc(100dvh-100%)] overflow-y-auto border-b-3 border-ink bg-yellow xl:hidden"
         >
           <div className="mx-auto max-w-page px-4 pt-2 pb-6 md:px-10">
