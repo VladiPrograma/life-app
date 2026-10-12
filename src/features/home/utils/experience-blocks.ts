@@ -1,4 +1,5 @@
 import type { CareerJob } from '@/features/home/home-content';
+import type { Locale } from '@/lib/i18n/locale';
 
 function toMonthIndex(yearMonth: string) {
   return Number(yearMonth.slice(0, 4)) * 12 + Number(yearMonth.slice(5, 7)) - 1;
@@ -12,9 +13,16 @@ export function halfYearsIn(job: CareerJob, now: Date) {
   return Math.max(1, Math.round((end - toMonthIndex(job.start)) / 6));
 }
 
-/** "6 months", "1 year", "3.5 years". */
-export function formatHalfYears(halfYears: number) {
-  if (halfYears === 1) return '6 months';
+const durationUnits = {
+  en: { halfYear: '6 months', year: 'year', years: 'years' },
+  es: { halfYear: '6 meses', year: 'año', years: 'años' },
+} satisfies Record<Locale, Record<string, string>>;
+
+/** "6 months", "1 year", "3.5 years"; in Spanish "6 meses", "3,5 años". */
+export function formatHalfYears(halfYears: number, locale: Locale) {
+  const units = durationUnits[locale];
+  if (halfYears === 1) return units.halfYear;
   const years = halfYears / 2;
-  return `${years} ${years === 1 ? 'year' : 'years'}`;
+  const amount = new Intl.NumberFormat(locale).format(years);
+  return `${amount} ${years === 1 ? units.year : units.years}`;
 }

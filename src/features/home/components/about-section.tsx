@@ -8,6 +8,20 @@ import {
   techLoadout,
   type AboutTabId,
 } from '@/features/home/home-content';
+import { localized, useLocale } from '@/lib/i18n/locale';
+
+const copy = localized({
+  en: {
+    title: 'About me',
+    subtitle: 'Meet the player',
+    techLoadout: 'Tech loadout',
+  },
+  es: {
+    title: 'Sobre mí',
+    subtitle: 'Conoce al jugador',
+    techLoadout: 'Arsenal técnico',
+  },
+});
 
 // Layout follows the supplied design on the hero's blue. On desktop
 // the backdrop mirrors the projects section, as the user asked: rays behind
@@ -15,6 +29,8 @@ import {
 // divider between them, so the two patterns never overlap. Narrower layouts
 // stack the columns and keep the grid only.
 export function AboutSection() {
+  const locale = useLocale();
+  const text = copy[locale];
   const [activeTab, setActiveTab] = useState<AboutTabId>(defaultAboutTab);
 
   return (
@@ -41,10 +57,10 @@ export function AboutSection() {
             id="about-title"
             className="font-display text-h3 leading-none font-black whitespace-nowrap uppercase"
           >
-            About me
+            {text.title}
           </h2>
           <p className="hidden border-l-3 border-ink pl-6 font-mono text-lg leading-none font-bold tracking-[0.3em] uppercase md:block">
-            Meet the player
+            {text.subtitle}
           </p>
           {/* Decorative window controls; the section cannot be closed. */}
           <div aria-hidden="true" className="ml-auto flex gap-2">
@@ -72,19 +88,19 @@ export function AboutSection() {
         <div className="mt-10 flex flex-col gap-5 rounded-md border-3 border-ink bg-cream p-4 shadow-brutal-lg md:px-6 lg:mt-24 lg:flex-row lg:flex-wrap lg:items-center lg:gap-x-6 lg:py-5">
           <h3 className="flex shrink-0 -rotate-2 items-center gap-3 self-start border-3 border-ink bg-pink px-4 py-2 font-display text-lead leading-none font-black whitespace-nowrap uppercase shadow-brutal lg:self-center">
             <GearIcon className="size-[1.1em]" />
-            Tech loadout
+            {text.techLoadout}
           </h3>
           <ul className="grid grid-cols-2 gap-x-4 gap-y-5 md:grid-cols-4 lg:flex lg:flex-auto lg:flex-wrap lg:justify-between lg:gap-x-0 lg:gap-y-4">
             {techLoadout.map((group) => (
               <li
-                key={group.category}
+                key={group.category.en}
                 className="lg:border-l-2 lg:border-ink/40 lg:px-3.5"
               >
                 <p className="font-mono text-xs leading-none font-bold uppercase underline underline-offset-4">
-                  {group.category}
+                  {group.category[locale]}
                 </p>
                 <ul
-                  aria-label={group.category}
+                  aria-label={group.category[locale]}
                   className="mt-2.5 flex flex-wrap gap-2.5 lg:flex-nowrap"
                 >
                   {group.items.map((item) => (

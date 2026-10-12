@@ -4,6 +4,12 @@ import {
   WhatsAppIcon,
 } from '@/features/home/components/icons';
 import { socialLinks, type SocialNetwork } from '@/features/home/home-content';
+import { useLocale, type Localized } from '@/lib/i18n/locale';
+
+const listLabel: Localized<string> = {
+  en: 'Social profiles',
+  es: 'Redes sociales',
+};
 
 const icons = {
   LinkedIn: LinkedInIcon,
@@ -23,11 +29,12 @@ export function SocialLinks({
 }: {
   tone?: keyof typeof toneClassNames;
 }) {
+  const locale = useLocale();
   const links = socialLinks.filter((link) => link.href !== '');
   if (links.length === 0) return null;
 
   return (
-    <ul aria-label="Social profiles" className="flex flex-wrap gap-4">
+    <ul aria-label={listLabel[locale]} className="flex flex-wrap gap-4">
       {links.map(({ label, href }) => {
         const Icon = icons[label];
         return (

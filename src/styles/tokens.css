@@ -99,4 +99,8 @@
      mobile sections to the multi-column reference layout. */
   --breakpoint-md: 48rem;
   --breakpoint-lg: 64rem;
+  /* The full header bar: below this the navigation, calls to action and
+     language switch fold into the menu, as Spanish copy plus the switch
+     need about 1130px. */
+  --breakpoint-xl: 80rem;
 }

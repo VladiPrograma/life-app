@@ -4,9 +4,23 @@ import { ArrowUpRightIcon } from '@/features/home/components/icons';
 import { ProjectPreview } from '@/features/home/components/project-preview';
 import { projects } from '@/features/home/home-content';
 import { useIsWideLayout } from '@/features/home/hooks/use-is-wide-layout';
+import { localized, useLocale } from '@/lib/i18n/locale';
 
 // Tag chips reuse the hero sticker palette, cycling per position.
 const tagColors = ['bg-yellow', 'bg-pink', 'bg-green', 'bg-paper'];
+
+const copy = localized({
+  en: {
+    titleExclamation: 'Damn!',
+    titleQuestion: 'I built this?',
+    technologies: (project: string) => `${project} technologies`,
+  },
+  es: {
+    titleExclamation: '¡Ostras!',
+    titleQuestion: '¿Esto lo hice yo?',
+    technologies: (project: string) => `Tecnologías de ${project}`,
+  },
+});
 
 // Layout follows the supplied design. Assumption: the reference uses
 // a condensed display face that was not supplied; Red Hat Display stands in.
@@ -14,6 +28,8 @@ const tagColors = ['bg-yellow', 'bg-pink', 'bg-green', 'bg-paper'];
 // selected project instead of above the list, where it would change out of
 // sight.
 export function ProjectsSection() {
+  const locale = useLocale();
+  const text = copy[locale];
   const [activeNumber, setActiveNumber] = useState(projects[0]?.number);
   const isWide = useIsWideLayout();
   const activeProject =
@@ -27,19 +43,15 @@ export function ProjectsSection() {
     }
 
     // The previous preview may close above the tapped project. Keep the
-    // project where the user tapped it, then reveal its preview.
+    // project where the user tapped it. Instant, overriding the page's smooth
+    // scrolling, so the correction lands in the same frame and is not seen.
+    // The page never scrolls to reveal the new preview: the user scrolls.
     const topBefore = trigger.getBoundingClientRect().top;
     flushSync(() => setActiveNumber(number));
-    // Instant, overriding the page's smooth scrolling, so the reveal below
-    // starts from the corrected position.
     window.scrollBy({
       top: trigger.getBoundingClientRect().top - topBefore,
       behavior: 'instant',
     });
-    trigger
-      .closest('li')
-      ?.querySelector('figure')
-      ?.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
   }
 
   return (
@@ -54,8 +66,8 @@ export function ProjectsSection() {
             id="projects-title"
             className="font-display text-h2 leading-none font-black uppercase"
           >
-            <span className="text-yellow">Damn!</span>{' '}
-            <span className="italic">I built this?</span>
+            <span className="text-yellow">{text.titleExclamation}</span>{' '}
+            <span className="italic">{text.titleQuestion}</span>
           </h2>
         </div>
 
@@ -103,10 +115,10 @@ export function ProjectsSection() {
                 </button>
 
                 <ul
-                  aria-label={`${project.title} technologies`}
+                  aria-label={text.technologies(project.title)}
                   className="col-span-2 flex flex-wrap gap-2.5 md:col-span-1 md:justify-end"
                 >
-                  {project.tags.map((tag, index) => (
+                  {project.tags[locale].map((tag, index) => (
                     <li
                       key={tag}
                       className={`rounded-md border-3 border-ink px-2.5 py-1.5 font-mono text-xs leading-none font-black text-ink uppercase transition-[translate,box-shadow] duration-150 ${
