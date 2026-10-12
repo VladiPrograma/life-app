@@ -1,6 +1,6 @@
 import { useEffect, useId, useRef, useState } from 'react';
 import { ActionLink } from '@/features/home/components/action-link';
-import cvUrl from '@/assets/documents/vlad-dumitru-dinca-cv.pdf';
+import cvUrl from '@/assets/documents/vlad-dumitru-dinca-cv-en.pdf';
 import logoUrl from '@/assets/logo.webp';
 import { ArrowRightIcon, DownloadIcon } from '@/features/home/components/icons';
 import { navigationItems, profile } from '@/features/home/home-content';
